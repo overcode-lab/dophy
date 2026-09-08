@@ -1,0 +1,41 @@
+name: Deploy Affiliate App to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/affiliate-app/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-affiliate-app.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build & Deploy Affiliate App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build OpenNext Cloudflare Bundle
+        run: npm run build:cf --workspace=apps/affiliate-app
+
+      - name: Deploy Worker to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: 'apps/affiliate-app'
+          command: deploy
