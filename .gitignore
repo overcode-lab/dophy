@@ -30,3 +30,8 @@ pnpm-debug.log*
 *.pem
 .vscode/
 .idea/
+
+# Turbo & TypeScript build cache
+.turbo/
+*.tsbuildinfo
+

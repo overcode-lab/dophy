@@ -3,6 +3,7 @@ export interface CloudinaryConfig {
   uploadPreset?: string;
   apiKey?: string;
   apiSecret?: string;
+  env?: string;
 }
 
 export function getCloudinaryConfig(): CloudinaryConfig {
@@ -11,13 +12,30 @@ export function getCloudinaryConfig(): CloudinaryConfig {
     uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "",
     apiKey: process.env.CLOUDINARY_API_KEY || "",
     apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+    env: process.env.CLOUDINARY_ENV || "production",
   };
 }
 
 /**
- * Builds an optimized Cloudinary image URL.
+ * Helper to slugify string for URL-safe Cloudinary folder names.
  */
-export function buildCloudinaryUrl(publicId: string, options?: { width?: number; height?: number; crop?: string; quality?: string }) {
+export function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+}
+
+/**
+ * Builds an optimized Cloudinary image URL with transformation parameters.
+ */
+export function buildCloudinaryUrl(
+  publicId: string,
+  options?: { width?: number; height?: number; crop?: string; quality?: string }
+) {
   const { cloudName } = getCloudinaryConfig();
   if (!cloudName) return publicId;
 
@@ -31,10 +49,13 @@ export function buildCloudinaryUrl(publicId: string, options?: { width?: number;
 }
 
 /**
- * Directly uploads a file via client-side unsigned preset to Cloudinary REST API.
- * Compatible with Edge environments and Cloudflare Workers.
+ * Generic unsigned Cloudinary file uploader compatible with Client/Server/Edge.
  */
-export async function uploadToCloudinary(file: File, folder = "dophy-receipts"): Promise<{ url: string; public_id: string }> {
+export async function uploadToCloudinary(
+  file: File | Blob,
+  folder = "dophy/production/general",
+  customPublicId?: string
+): Promise<{ url: string; public_id: string }> {
   const { cloudName, uploadPreset } = getCloudinaryConfig();
 
   if (!cloudName || !uploadPreset) {
@@ -45,6 +66,10 @@ export async function uploadToCloudinary(file: File, folder = "dophy-receipts"):
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
   formData.append("folder", folder);
+
+  if (customPublicId) {
+    formData.append("public_id", customPublicId);
+  }
 
   const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
     method: "POST",
@@ -61,4 +86,28 @@ export async function uploadToCloudinary(file: File, folder = "dophy-receipts"):
     url: data.secure_url,
     public_id: data.public_id,
   };
+}
+
+/**
+ * Specialized Cloudinary Uploader per Affiliate:
+ * Generates path: dophy/{env}/affiliators/{referralCode}_{slugName}/{folderType}/
+ */
+export async function uploadAffiliateAssetToCloudinary({
+  file,
+  referralCode,
+  affiliateName,
+  folderType, // 'withdrawals' | 'sales-receipts'
+  customFileName,
+}: {
+  file: File | Blob;
+  referralCode: string;
+  affiliateName: string;
+  folderType: "withdrawals" | "sales-receipts";
+  customFileName?: string;
+}): Promise<{ url: string; public_id: string }> {
+  const { env } = getCloudinaryConfig();
+  const affiliateFolderSlug = `${referralCode}_${slugify(affiliateName)}`;
+  const folderPath = `dophy/${env || "production"}/affiliators/${affiliateFolderSlug}/${folderType}`;
+
+  return uploadToCloudinary(file, folderPath, customFileName);
 }

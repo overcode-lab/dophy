@@ -32,7 +32,7 @@ export default function LinktreePage() {
       navigator
         .share({
           title: "DOPHY — You Need Dopamine",
-          text: "Snack Krispi Kemasan 65gr Penambah Mood!",
+          text: "Snack Penambah Mood!",
           url: window.location.href,
         })
         .catch(() => {});
@@ -48,7 +48,7 @@ export default function LinktreePage() {
       id: "whatsapp",
       title: "Order WhatsApp",
       subtitle: "+62 851-9044-1622 (Respon Cepat)",
-      url: "https://wa.me/6285190441622?text=Halo%20Admin%20Dophy!%20Saya%20ingin%20pesan%20snack%20Dophy%2065gr",
+      url: "https://wa.me/6285190441622?text=Halo%20Admin%20Dophy!%20Saya%20ingin%20pesan%20snack%20Dophy%20",
       icon: MessageCircle,
       badge: "Fast Order",
       badgeStyle: "bg-emerald-50 text-emerald-700 border-emerald-200/80 anim-badge-fast-1",

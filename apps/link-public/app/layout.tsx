@@ -17,18 +17,16 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "DOPHY — You Need Dopamine",
-  description: "Link resmi DOPHY (Dopamine Snack) — Pesan Snack Kemasan 65gr, daftar affiliate, & media sosial resmi.",
+  description: "Link resmi DOPHY (Dopamine Snack) — Pesan Snack, daftar affiliate, & media sosial resmi.",
   manifest: "/manifest.json",
   icons: {
-    icon: [
-      { url: "/assets/logo-transparent.png", type: "image/png" },
-    ],
+    icon: [{ url: "/assets/logo-transparent.png", type: "image/png" }],
     shortcut: "/assets/logo-transparent.png",
     apple: "/assets/logo-transparent.png",
   },
   openGraph: {
     title: "DOPHY — You Need Dopamine",
-    description: "Snack Krispi Kemasan 65gr Penambah Mood & Energi Harianmu 🍿✨",
+    description: "Snack Penambah Mood & Energi Harianmu 🍿✨",
     url: "https://dophy.com",
     siteName: "DOPHY Official",
     images: [
@@ -45,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "DOPHY — You Need Dopamine",
-    description: "Snack Krispi Kemasan 65gr Penambah Mood & Energi Harianmu 🍿✨",
+    description: "Snack Penambah Mood & Energi Harianmu 🍿✨",
     images: ["/assets/logo-transparent.png"],
   },
 };
@@ -65,7 +63,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${jakarta.className} antialiased selection:bg-dophy-500 selection:text-white font-sans`} suppressHydrationWarning>
+      <body
+        className={`${jakarta.className} antialiased selection:bg-dophy-500 selection:text-white font-sans`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

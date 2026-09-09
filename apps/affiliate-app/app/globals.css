@@ -1,15 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #090d16;
-  --foreground: #f8fafc;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  font-family: 'Plus Jakarta Sans', var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+html {
+  font-size: 16px;
+}
+
+/* ENLARGE FONT SIZE ON DESKTOP SCREENS OVERALL */
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px; /* Scales desktop typography comfortably across all pages */
+  }
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: 20px;
+  }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', var(--font-jakarta), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   min-height: 100vh;
 }
+
+/* CUTELY ANIMATED PLAYFUL INFINITY LOGO */
+@keyframes logoPlayful {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-3deg) scale(1.04);
+  }
+  50% {
+    transform: translateY(-2px) rotate(1deg) scale(0.98);
+  }
+  75% {
+    transform: translateY(-6px) rotate(3deg) scale(1.05);
+  }
+}
+
+.anim-logo-playful {
+  animation: logoPlayful 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  display: inline-block;
+  will-change: transform;
+}
+
+/* HIDE SCROLLBAR UTILITIES (CROSS-BROWSER) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+

@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
 export const viewport: Viewport = {
-  themeColor: "#ff7726",
+  themeColor: "#f05713",
   width: "device-width",
   initialScale: 1,
 };
@@ -12,9 +20,7 @@ export const metadata: Metadata = {
   description: "Aplikasi Affiliate Marketing & Management System DOPHY (Dopamine Snack)",
   manifest: "/manifest.json",
   icons: {
-    icon: [
-      { url: "/assets/logo-transparent.png", type: "image/png" },
-    ],
+    icon: [{ url: "/assets/logo-transparent.png", type: "image/png" }],
     shortcut: "/assets/logo-transparent.png",
     apple: "/assets/logo-transparent.png",
   },
@@ -31,8 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning>
-      <body className="antialiased selection:bg-dophy-500 selection:text-white" suppressHydrationWarning>
+    <html lang="id" className={plusJakartaSans.variable} suppressHydrationWarning>
+      <body
+        className="font-sans antialiased bg-slate-50 text-slate-900 selection:bg-dophy-500 selection:text-white min-h-screen"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
