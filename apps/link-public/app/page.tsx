@@ -2,17 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import {
-  MessageCircle,
-  Instagram,
-  ShoppingBag,
-  Zap,
-  Share2,
-  Users,
-  Check,
-  Flame,
-  ChevronRight,
-} from "lucide-react";
+import { MessageCircle, Instagram, ShoppingBag, Zap, Share2, Users, Check, Flame, ChevronRight } from "lucide-react";
 
 // Custom TikTok Icon Component
 function TikTokIcon({ className = "w-6 h-6" }: { className?: string }) {
@@ -165,12 +155,15 @@ export default function LinktreePage() {
 
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-dophy-100/80 border border-dophy-200 text-dophy-800 text-[10px] font-extrabold uppercase tracking-wider anim-badge-fast-1">
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-400 animate-bounce" style={{ animationDuration: "1.2s" }} /> YOU NEED DOPAMINE
+              <Zap
+                className="w-3.5 h-3.5 text-amber-500 fill-amber-400 animate-bounce"
+                style={{ animationDuration: "1.2s" }}
+              />{" "}
+              YOU NEED DOPAMINE
             </div>
             <h1 className="text-2xl font-black tracking-tight text-slate-900">DOPHY Snack Official</h1>
             <p className="text-slate-600 text-sm max-w-[310px] mx-auto leading-relaxed font-medium pt-0.5">
-              <span className="font-extrabold text-dophy-600">Snack premium</span>{" "}
-              <span>biar harimu balik</span>{" "}
+              <span className="font-extrabold text-dophy-600">Snack premium</span> <span>biar harimu balik</span>{" "}
               <span className="font-bold text-slate-900 underline decoration-dophy-400 decoration-2 underline-offset-4 hover:text-dophy-600 hover:decoration-dophy-600 transition-all cursor-default">
                 produktif
               </span>{" "}
@@ -196,20 +189,16 @@ export default function LinktreePage() {
             const Icon = item.icon;
 
             const variantStyles = {
-              whatsapp: "bg-emerald-50/70 border-emerald-200/60 hover:bg-emerald-100/70 hover:border-emerald-300 shadow-sm",
+              whatsapp:
+                "bg-emerald-50/70 border-emerald-200/60 hover:bg-emerald-100/70 hover:border-emerald-300 shadow-sm",
               tiktok: "bg-rose-50/60 border-rose-200/60 hover:bg-rose-100/70 hover:border-pink-300 shadow-sm",
-              instagram: "bg-purple-50/70 border-purple-200/60 hover:bg-purple-100/70 hover:border-purple-300 shadow-sm",
+              instagram:
+                "bg-purple-50/70 border-purple-200/60 hover:bg-purple-100/70 hover:border-purple-300 shadow-sm",
               affiliate: "bg-amber-50/70 border-amber-200/60 hover:bg-amber-100/70 hover:border-amber-300 shadow-sm",
             }[item.variant];
 
             return (
-              <a
-                key={item.id}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block group"
-              >
+              <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">
                 <div
                   className={`p-3.5 rounded-2xl border transition-all duration-200 flex items-center gap-3.5 ${variantStyles}`}
                 >
@@ -248,7 +237,7 @@ export default function LinktreePage() {
           <div className="flex items-center justify-between px-0.5">
             <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
               <ShoppingBag className="w-3.5 h-3.5 text-dophy-600 animate-pulse" />
-              <span>Katalog Snack 65gr</span>
+              <span>Katalog Snack</span>
             </div>
             <span className="text-[10px] font-extrabold text-dophy-700 bg-dophy-100 px-2 py-0.5 rounded-full border border-dophy-200 anim-badge-fast-1">
               Pilihan Rasa
