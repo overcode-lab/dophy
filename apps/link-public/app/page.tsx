@@ -84,7 +84,7 @@ export default function LinktreePage() {
       id: "affiliate",
       title: "Program Creator Partner",
       subtitle: "Gabung & Dapatkan Komisi",
-      url: process.env.NEXT_PUBLIC_APP_URL || "https://app.dophy.com",
+      url: process.env.NEXT_PUBLIC_AFFILIATE_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://affiliate.dophy.my.id",
       icon: Users,
       badge: "Mitra Bisnis",
       badgeStyle: "bg-dophy-100 text-dophy-800 border-dophy-200 anim-badge-fast-2",
