@@ -2,26 +2,22 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { 
-  MessageCircle, 
-  Instagram, 
-  ShoppingBag, 
-  Sparkles, 
-  Share2, 
-  Users, 
-  Check, 
+import {
+  MessageCircle,
+  Instagram,
+  ShoppingBag,
+  Zap,
+  Share2,
+  Users,
+  Check,
   Flame,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 
 // Custom TikTok Icon Component
 function TikTokIcon({ className = "w-6 h-6" }: { className?: string }) {
   return (
-    <svg 
-      className={className} 
-      viewBox="0 0 24 24" 
-      fill="currentColor"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.35 22a6.33 6.33 0 0 0 6.33-6.33V9.45a9.66 9.66 0 0 0 3.91 1.72V7.72a6.36 6.36 0 0 1-3.77-1.03z" />
     </svg>
   );
@@ -43,11 +39,13 @@ export default function LinktreePage() {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: "DOPHY — You Need Dopamine",
-        text: "Snack Krispi Kemasan 65gr Penambah Mood!",
-        url: window.location.href,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: "DOPHY — You Need Dopamine",
+          text: "Snack Krispi Kemasan 65gr Penambah Mood!",
+          url: window.location.href,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -94,7 +92,7 @@ export default function LinktreePage() {
     },
     {
       id: "affiliate",
-      title: "Program Affiliate DOPHY",
+      title: "Program Creator Partner",
       subtitle: "Gabung & Dapatkan Komisi",
       url: process.env.NEXT_PUBLIC_APP_URL || "https://app.dophy.com",
       icon: Users,
@@ -108,21 +106,23 @@ export default function LinktreePage() {
 
   const featuredProducts = [
     {
-      name: "DOPHY Signature",
+      name: "DOPHY Coffee",
       weight: "65 gram",
       description: "Snack krispi lezat penambah mood!",
       image: "/assets/product-1.png",
       tag: "Best Seller 🔥",
-      tagStyle: "bg-gradient-to-r from-red-600 to-orange-500 text-white font-extrabold shadow-sm shadow-red-500/20 border border-red-400/30 anim-badge-fast-1",
+      tagStyle:
+        "bg-gradient-to-r from-red-600 to-orange-500 text-white font-extrabold shadow-sm shadow-red-500/20 border border-red-400/30 anim-badge-fast-1",
       animClass: "anim-card-jelly",
     },
     {
-      name: "DOPHY Special",
+      name: "DOPHY Chocolate",
       weight: "65 gram",
       description: "Gurih renyah bumbu melimpah!",
       image: "/assets/product-2.png",
       tag: "Favorit ⭐️",
-      tagStyle: "bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-extrabold shadow-sm shadow-emerald-500/20 border border-emerald-400/30 anim-badge-fast-2",
+      tagStyle:
+        "bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-extrabold shadow-sm shadow-emerald-500/20 border border-emerald-400/30 anim-badge-fast-2",
       animClass: "anim-card-pop",
     },
   ];
@@ -140,35 +140,44 @@ export default function LinktreePage() {
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 border border-slate-200 backdrop-blur-md text-[11px] font-bold text-slate-700 hover:text-dophy-600 hover:border-dophy-400 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer anim-button-heartbeat"
           title="Bagikan Halaman Ini"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5 text-dophy-500 animate-spin" style={{ animationDuration: '4s' }} />}
+          {copied ? (
+            <Check className="w-3.5 h-3.5 text-emerald-600" />
+          ) : (
+            <Share2 className="w-3.5 h-3.5 text-dophy-500 animate-spin" style={{ animationDuration: "4s" }} />
+          )}
           <span>{copied ? "Tersalin!" : "Bagikan"}</span>
         </button>
       </div>
 
       <div className="max-w-sm w-full z-10 space-y-5">
-        
         {/* LOGO & BRAND HEADER (Fast Playful Sway & Scale) */}
         <section className="text-center space-y-2">
-          <div className="relative w-36 h-20 mx-auto flex items-center justify-center anim-logo-fast">
+          <div className="relative w-52 h-28 mx-auto flex items-center justify-center anim-logo-fast">
             <Image
               src="/assets/logo-transparent.png"
               alt="DOPHY Logo"
-              width={160}
-              height={90}
+              width={220}
+              height={120}
               priority
-              className="object-contain w-full h-full drop-shadow-[0_6px_16px_rgba(240,87,19,0.2)] transition-transform duration-300 hover:scale-115"
+              className="object-contain w-full h-full drop-shadow-[0_8px_20px_rgba(240,87,19,0.22)] transition-transform duration-300 hover:scale-110"
             />
           </div>
 
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-dophy-100 border border-dophy-200 text-dophy-700 text-[10px] font-extrabold uppercase tracking-wider anim-badge-fast-1">
-              <Sparkles className="w-3 h-3 animate-spin" style={{ animationDuration: '3s' }} /> YOU NEED DOPAMINE
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-dophy-100/80 border border-dophy-200 text-dophy-800 text-[10px] font-extrabold uppercase tracking-wider anim-badge-fast-1">
+              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-400 animate-bounce" style={{ animationDuration: "1.2s" }} /> YOU NEED DOPAMINE
             </div>
-            <h1 className="text-xl font-extrabold tracking-tight text-slate-900">
-              DOPHY Snack Official
-            </h1>
-            <p className="text-slate-600 text-xs max-w-[280px] mx-auto leading-relaxed font-medium">
-              Snack krispi 65gr penambah mood & energi harianmu 🍿✨
+            <h1 className="text-2xl font-black tracking-tight text-slate-900">DOPHY Snack Official</h1>
+            <p className="text-slate-600 text-sm max-w-[310px] mx-auto leading-relaxed font-medium pt-0.5">
+              <span className="font-extrabold text-dophy-600">Snack premium</span>{" "}
+              <span>biar harimu balik</span>{" "}
+              <span className="font-bold text-slate-900 underline decoration-dophy-400 decoration-2 underline-offset-4 hover:text-dophy-600 hover:decoration-dophy-600 transition-all cursor-default">
+                produktif
+              </span>{" "}
+              <span>dan makin</span>{" "}
+              <span className="font-extrabold text-amber-600 hover:text-amber-500 transition-colors cursor-default inline-flex items-center gap-1">
+                ceria <span className="animate-bounce inline-block text-xs">🍿</span>
+              </span>
             </p>
           </div>
         </section>
@@ -179,7 +188,7 @@ export default function LinktreePage() {
         {/* COMPACT LINKS LIST WITH VARIED PLAYFUL ANIMATIONS */}
         <section className="space-y-2.5">
           <div className="flex items-center gap-1.5 px-0.5 text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
-            <Flame className="w-3.5 h-3.5 text-dophy-600 animate-bounce" style={{ animationDuration: '1.2s' }} />
+            <Flame className="w-3.5 h-3.5 text-dophy-600 animate-bounce" style={{ animationDuration: "1.2s" }} />
             <span>Kanal Resmi & Pemesanan</span>
           </div>
 
@@ -187,10 +196,10 @@ export default function LinktreePage() {
             const Icon = item.icon;
 
             const variantStyles = {
-              whatsapp: "bg-white hover:bg-emerald-50/50 border-slate-200 hover:border-emerald-300 shadow-sm",
-              tiktok: "bg-white hover:bg-pink-50/40 border-slate-200 hover:border-pink-300 shadow-sm",
-              instagram: "bg-white hover:bg-purple-50/50 border-slate-200 hover:border-purple-300 shadow-sm",
-              affiliate: "bg-white hover:bg-dophy-50/50 border-slate-200 hover:border-dophy-300 shadow-sm",
+              whatsapp: "bg-emerald-50/70 border-emerald-200/60 hover:bg-emerald-100/70 hover:border-emerald-300 shadow-sm",
+              tiktok: "bg-rose-50/60 border-rose-200/60 hover:bg-rose-100/70 hover:border-pink-300 shadow-sm",
+              instagram: "bg-purple-50/70 border-purple-200/60 hover:bg-purple-100/70 hover:border-purple-300 shadow-sm",
+              affiliate: "bg-amber-50/70 border-amber-200/60 hover:bg-amber-100/70 hover:border-amber-300 shadow-sm",
             }[item.variant];
 
             return (
@@ -199,13 +208,15 @@ export default function LinktreePage() {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`block group ${item.animClass}`}
+                className="block group"
               >
                 <div
-                  className={`p-3.5 rounded-2xl border transition-all duration-200 group-hover:scale-[1.03] flex items-center gap-3.5 ${variantStyles}`}
+                  className={`p-3.5 rounded-2xl border transition-all duration-200 flex items-center gap-3.5 ${variantStyles}`}
                 >
-                  {/* Direct Icon With Playful Rotate/Scale */}
-                  <Icon className={`w-6 h-6 flex-shrink-0 transition-transform group-hover:scale-125 anim-icon-fun ${item.iconColor}`} />
+                  {/* Direct Icon With Playful Animation */}
+                  <Icon
+                    className={`w-6 h-6 flex-shrink-0 transition-transform group-hover:scale-125 ${item.iconColor} ${item.animClass}`}
+                  />
 
                   {/* Clean Content Area */}
                   <div className="min-w-0 flex-1 text-left">
@@ -214,14 +225,14 @@ export default function LinktreePage() {
                         {item.title}
                       </h3>
                       {item.badge && (
-                        <span className={`px-1.5 py-0.5 rounded border text-[9px] font-extrabold flex-shrink-0 ${item.badgeStyle}`}>
+                        <span
+                          className={`px-1.5 py-0.5 rounded border text-[9px] font-extrabold flex-shrink-0 ${item.badgeStyle}`}
+                        >
                           {item.badge}
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] font-medium text-slate-500 mt-0.5">
-                      {item.subtitle}
-                    </p>
+                    <p className="text-[11px] font-medium text-slate-600 mt-0.5">{item.subtitle}</p>
                   </div>
                 </div>
               </a>
@@ -248,7 +259,7 @@ export default function LinktreePage() {
             {featuredProducts.map((prod, idx) => (
               <div
                 key={idx}
-                className={`group rounded-2xl bg-white border border-slate-200/90 p-3 flex flex-col justify-between hover:border-dophy-400 hover:shadow-md transition-all duration-300 ${prod.animClass}`}
+                className={`group flex flex-col justify-between p-1 transition-all duration-300 ${prod.animClass}`}
               >
                 <div className="space-y-2.5">
                   {/* Product Image with Wiggle Hover */}
@@ -270,9 +281,7 @@ export default function LinktreePage() {
                     <h4 className="font-extrabold text-xs text-slate-900 group-hover:text-dophy-600 transition-colors">
                       {prod.name}
                     </h4>
-                    <p className="text-xs font-medium text-slate-600 leading-snug">
-                      {prod.description}
-                    </p>
+                    <p className="text-xs font-medium text-slate-600 leading-snug">{prod.description}</p>
                   </div>
                 </div>
 
@@ -299,7 +308,6 @@ export default function LinktreePage() {
           <p className="font-semibold">© {new Date().getFullYear()} DOPHY (Dopamine Snack)</p>
           <p className="text-[10px] text-slate-400 font-medium">All rights reserved · Official Linktree</p>
         </footer>
-
       </div>
     </main>
   );
