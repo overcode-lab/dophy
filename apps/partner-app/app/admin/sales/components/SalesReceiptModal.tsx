@@ -58,7 +58,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
   const qty = Number(receipt.quantity) || 1;
   const unitPrice = Number(receipt.product_price) || 0;
   const grossTotal = qty * unitPrice;
-  const discountPerPcs = 3000;
+  const discountPerPcs = 2000;
   const totalDiscount = hasReferral ? qty * discountPerPcs : 0;
   const finalTotal = hasReferral ? Math.max(0, grossTotal - totalDiscount) : Number(receipt.total_price) || grossTotal;
 
@@ -78,8 +78,8 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
     ];
 
     if (hasReferral) {
-      lines.push(`• Diskon Creator Code`);
-      lines.push(`  Hemat Rp 3.000 / pcs × ${qty} Pcs = -Rp ${totalDiscount.toLocaleString("id-ID")}`);
+      lines.push(`• Diskon`);
+      lines.push(`  Hemat Rp 2.000 / pcs × ${qty} Pcs = -Rp ${totalDiscount.toLocaleString("id-ID")}`);
     }
 
     lines.push(``);
@@ -88,7 +88,6 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
 
     if (hasReferral) {
       lines.push(`🎉 *Selamat! Anda sudah menghemat sebanyak Rp ${totalDiscount.toLocaleString("id-ID")}*`);
-      lines.push(`_Terima kasih telah mendukung Creator Partner & camilan lokal DOPHY._ ✨`);
     } else {
       lines.push(`_Terima kasih telah berbelanja di DOPHY._ 🙏✨`);
     }
@@ -140,7 +139,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
       if (!ctx) return;
 
       const width = 400;
-      const height = hasReferral ? 512 : 374;
+      const height = hasReferral ? 465 : 374;
 
       canvas.width = width * scale;
       canvas.height = height * scale;
@@ -238,11 +237,11 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
         ctx.textAlign = "left";
         ctx.fillStyle = "#059669";
         ctx.font = "800 12px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText("Diskon Creator Code", 24, currentY);
+        ctx.fillText("Diskon", 24, currentY);
 
         ctx.fillStyle = "#10b981";
         ctx.font = "600 10.5px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(`Hemat Rp 3.000 / pcs × ${qty} Pcs`, 24, currentY + 16);
+        ctx.fillText(`Hemat Rp 2.000 / pcs × ${qty} Pcs`, 24, currentY + 16);
 
         ctx.textAlign = "right";
         ctx.fillStyle = "#059669";
@@ -290,15 +289,8 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
         ctx.font = "900 13.5px 'Plus Jakarta Sans', sans-serif";
         ctx.fillText(`🎉 Selamat! Anda Berhasil Menghemat Rp ${totalDiscount.toLocaleString("id-ID")}`, 24, currentY);
 
-        currentY += 26; // Luas gap dari title ke deskripsi
-        ctx.fillStyle = "#64748b";
-        ctx.font = "500 10.5px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText("Terima kasih telah menggunakan Creator Code resmi DOPHY.", 24, currentY);
-        currentY += 17;
-        ctx.fillText("Setiap pembelian turut mendukung kemajuan Creator & UMKM! ✨", 24, currentY);
-
         // Dashed Line 4
-        currentY += 22;
+        currentY += 24;
         ctx.strokeStyle = "#e2e8f0";
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -451,8 +443,8 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
             {hasReferral && (
               <div className="flex items-start justify-between gap-2 pt-1.5 border-t border-dashed border-slate-100">
                 <div className="min-w-0">
-                  <p className="font-black text-emerald-700 leading-tight">Diskon Creator Code</p>
-                  <p className="text-[11px] font-semibold text-emerald-600 mt-0.5">Hemat Rp 3.000 / pcs × {qty} Pcs</p>
+                  <p className="font-black text-emerald-700 leading-tight">Diskon</p>
+                  <p className="text-[11px] font-semibold text-emerald-600 mt-0.5">Hemat Rp 2.000 / pcs × {qty} Pcs</p>
                 </div>
                 <span className="font-black text-emerald-600 text-right shrink-0">
                   - Rp {totalDiscount.toLocaleString("id-ID")}
@@ -474,21 +466,14 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
 
           {/* Appreciation / Savings Narrative (Borderless, Clean Left-aligned) */}
           {hasReferral ? (
-            <div className="py-1.5 space-y-2 text-left">
-              <p className="text-lg font-black text-emerald-800 leading-snug tracking-tight mb-2">
+            <div className="py-1 text-left">
+              <p className="text-base sm:text-lg font-black text-emerald-800 leading-snug tracking-tight">
                 🎉 Selamat! Anda Berhasil Menghemat Rp {totalDiscount.toLocaleString("id-ID")}
-              </p>
-              <p className="text-xs sm:text-[12.5px] text-slate-500 font-medium leading-relaxed">
-                Terima kasih telah menggunakan Creator Code resmi DOPHY. Setiap pembelian Anda turut mendukung kemajuan
-                Creator Partner & produk UMKM lokal! ✨
               </p>
             </div>
           ) : (
-            <div className="py-1.5 space-y-2 text-left">
+            <div className="py-1 text-left">
               <p className="text-sm font-extrabold text-slate-800">Terima kasih telah berbelanja di DOPHY!</p>
-              <p className="text-xs text-slate-500 font-medium">
-                Gunakan Creator Code resmi pada pesanan berikutnya untuk mendapatkan diskon hemat Rp 3.000 / pcs.
-              </p>
             </div>
           )}
 

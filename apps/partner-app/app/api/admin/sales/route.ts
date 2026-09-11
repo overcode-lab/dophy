@@ -273,8 +273,8 @@ export async function POST(request: Request) {
     let partnerId: string | null = null;
     let commissionAmount = 0;
 
-    // Fixed commission: Rp 3.000 per pcs snack (dapat disesuaikan)
-    const COMMISSION_PER_PCS = 3000;
+    // Fixed commission: Rp 2.000 per pcs snack (dapat disesuaikan)
+    const COMMISSION_PER_PCS = 2000;
 
     if (referral_code && referral_code.trim()) {
       const cleanRefCode = referral_code.trim();

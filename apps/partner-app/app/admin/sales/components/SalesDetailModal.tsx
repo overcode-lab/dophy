@@ -182,12 +182,12 @@ export const SalesDetailModal: React.FC<SalesDetailModalProps> = ({ sale, onClos
             {hasReferral && (
               <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-100 text-xs">
                 <div className="min-w-0">
-                  <span className="text-emerald-700 font-bold block leading-tight">Diskon Creator Code</span>
-                  <span className="text-[10.5px] text-emerald-600/80 font-medium block mt-0.5">Hemat Rp 3.000 / pcs</span>
+                  <span className="text-emerald-700 font-bold block leading-tight">Diskon</span>
+                  <span className="text-[10.5px] text-emerald-600/80 font-medium block mt-0.5">Hemat Rp 2.000 / pcs</span>
                 </div>
                 <div className="text-right shrink-0">
                   <span className="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-black text-xs sm:text-[13px] border border-emerald-200/80 text-right">
-                    - Rp {(sale.quantity * 3000).toLocaleString("id-ID")}
+                    - Rp {(Number(sale.commission_amount) || sale.quantity * 2000).toLocaleString("id-ID")}
                   </span>
                 </div>
               </div>

@@ -86,7 +86,7 @@ export default function AdminNewSalePage() {
   const selectedProduct = products.find((p) => p.id === selectedProductId);
   const reqQty = Math.max(1, Number(quantity) || 1);
   const totalPrice = (selectedProduct ? Number(selectedProduct.price) : 0) * reqQty;
-  const commissionPreview = selectedPartner || referralCodeInput ? reqQty * 3000 : 0;
+  const commissionPreview = selectedPartner || referralCodeInput ? reqQty * 2000 : 0;
 
   // Filter partners for modal list
   const filteredPartners = partners.filter((a) => {
@@ -413,7 +413,7 @@ export default function AdminNewSalePage() {
                         commissionPreview > 0 ? "text-sky-800 font-bold" : "text-slate-500"
                       }`}
                     >
-                      {commissionPreview > 0 ? "Royalty Rp 3.000 / pcs" : "Tanpa Creator Code (Rp 0)"}
+                      {commissionPreview > 0 ? "Royalty Rp 2.000 / pcs" : "Tanpa Creator Code (Rp 0)"}
                     </span>
                   </div>
                   <strong className="relative z-10 text-base sm:text-lg font-black text-sky-950 shrink-0">
