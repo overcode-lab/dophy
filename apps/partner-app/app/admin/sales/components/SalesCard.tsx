@@ -40,16 +40,11 @@ export const SalesCard: React.FC<SalesCardProps> = ({ sale, index, onClick }) =>
       onClick={onClick}
       className="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-dophy-300 hover:shadow-md transition-all space-y-2 relative overflow-hidden text-left cursor-pointer active:scale-[0.98] group"
     >
-      {/* Row 1: Product Name & Referral Code */}
+      {/* Row 1: Product Name */}
       <div className="flex items-center justify-between gap-2">
         <h4 className="text-sm font-black text-slate-900 group-hover:text-dophy-600 transition-colors truncate">
           {sale.products?.name || "DOPHY Snack"}
         </h4>
-        {hasReferral && (
-          <span className="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 font-mono text-[10.5px] font-extrabold shrink-0 border border-slate-200 shadow-2xs">
-            {sale.referral_code}
-          </span>
-        )}
       </div>
 
       {/* Row 2: Date & Time Badges */}
@@ -64,20 +59,18 @@ export const SalesCard: React.FC<SalesCardProps> = ({ sale, index, onClick }) =>
         </span>
       </div>
 
-      {/* Row 3: Chips & Commission */}
-      <div className="flex items-center justify-between gap-2 pt-0.5 flex-wrap">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="px-2.5 py-1 rounded-xl bg-orange-50 text-dophy-700 font-extrabold text-xs border border-orange-200/80 shadow-2xs">
-            {sale.quantity} Pcs
+      {/* Row 3: Quantity & Creator Code Chips */}
+      <div className="flex items-center gap-1.5 pt-0.5 flex-wrap">
+        <span className="px-2.5 py-1 rounded-xl bg-orange-50 text-dophy-700 font-extrabold text-xs border border-orange-200/80 shadow-2xs">
+          {sale.quantity} Pcs
+        </span>
+        {hasReferral ? (
+          <span className="px-2.5 py-1 rounded-xl bg-purple-50 text-purple-700 font-mono font-extrabold text-xs border border-purple-200/80 shadow-2xs">
+            {sale.referral_code}
           </span>
-          <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 font-black text-xs border border-slate-200/80 shadow-2xs">
-            Rp {Number(sale.total_price).toLocaleString("id-ID")}
-          </span>
-        </div>
-
-        {hasReferral && (
-          <span className="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 font-black text-xs border border-emerald-200/80 shadow-2xs shrink-0">
-            +Rp {Number(sale.commission_amount).toLocaleString("id-ID")}
+        ) : (
+          <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-500 font-semibold text-xs border border-slate-200/80 shadow-2xs">
+            Tanpa Creator Code
           </span>
         )}
       </div>
