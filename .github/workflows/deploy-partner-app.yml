@@ -31,10 +31,11 @@ jobs:
 
       - name: Build OpenNext Cloudflare Bundle
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
-          NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://jjtvvqrpaqxqvbhoylnb.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqdHZ2cXJwYXF4cXZiaG95bG5iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4OTgyOTksImV4cCI6MjEwNDQ3NDI5OX0.ZUhCFL2KELtjlx0pGCfblLuFz1iFNn1B6dzMe1P6CXE' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqdHZ2cXJwYXF4cXZiaG95bG5iIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4ODg5ODI5OSwiZXhwIjoyMTA0NDc0Mjk5fQ.wdhTXNovnquxyT0I7pdyygj_d5PM2PuvwFc5ji3ehsM' }}
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'ag1msevp' }}
+          NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'dophy_uploads' }}
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL || 'https://partner.dophy.my.id' }}
           NEXT_PUBLIC_DEFAULT_REFERRAL_PREFIX: ${{ secrets.NEXT_PUBLIC_DEFAULT_REFERRAL_PREFIX || 'DOPHY-' }}
         run: npm run build:cf --workspace=apps/partner-app
