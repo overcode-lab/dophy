@@ -30,6 +30,13 @@ jobs:
         run: npm ci
 
       - name: Build OpenNext Cloudflare Bundle
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
+          NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET }}
+          NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL || 'https://partner.dophy.my.id' }}
+          NEXT_PUBLIC_DEFAULT_REFERRAL_PREFIX: ${{ secrets.NEXT_PUBLIC_DEFAULT_REFERRAL_PREFIX || 'DOPHY-' }}
         run: npm run build:cf --workspace=apps/partner-app
 
       - name: Deploy Worker to Cloudflare
