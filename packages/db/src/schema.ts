@@ -14,11 +14,11 @@ export const AdminSchema = z.object({
 export type Admin = z.infer<typeof AdminSchema>;
 
 // ==========================================
-// 2. AFFILIATE SCHEMA
+// 2. CREATOR PARTNER SCHEMA
 // ==========================================
-export const AffiliateStatusEnum = z.enum(["active", "inactive"]);
+export const PartnerStatusEnum = z.enum(["active", "inactive"]);
 
-export const AffiliateRegisterSchema = z.object({
+export const PartnerRegisterSchema = z.object({
   full_name: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Invalid email format"),
   phone_number: z.string().min(10, "Phone number must be at least 10 digits"),
@@ -27,19 +27,20 @@ export const AffiliateRegisterSchema = z.object({
   bank_name: z.string().min(2, "Bank / E-Wallet name is required"),
 });
 
-export const AffiliateSchema = AffiliateRegisterSchema.extend({
+export const PartnerSchema = PartnerRegisterSchema.extend({
   id: z.string().uuid().optional(),
   user_id: z.string().uuid().optional(),
   referral_code: z.string().min(3),
-  status: AffiliateStatusEnum.default("active"),
+  status: PartnerStatusEnum.default("active"),
   available_balance: z.number().nonnegative().default(0),
   held_balance: z.number().nonnegative().default(0),
   sales_target: z.number().nullable().optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
 });
-export type Affiliate = z.infer<typeof AffiliateSchema>;
-export type AffiliateRegisterInput = z.infer<typeof AffiliateRegisterSchema>;
+
+export type Partner = z.infer<typeof PartnerSchema>;
+export type PartnerRegisterInput = z.infer<typeof PartnerRegisterSchema>;
 
 // ==========================================
 // 3. PRODUCT SCHEMA
@@ -50,6 +51,7 @@ export const ProductSchema = z.object({
   weight: z.string().default("65 gr"),
   price: z.number().positive("Price must be greater than 0"),
   stock: z.number().int().min(0, "Stock cannot be negative"),
+  is_active: z.boolean().default(true).optional(),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
 });
@@ -68,7 +70,7 @@ export const SaleInputSchema = z.object({
 export const SaleSchema = SaleInputSchema.extend({
   id: z.string().uuid().optional(),
   total_price: z.number().nonnegative(),
-  affiliate_id: z.string().uuid().nullable().optional(),
+  partner_id: z.string().uuid().nullable().optional(),
   commission_amount: z.number().nonnegative(),
   recorded_by_admin_id: z.string().uuid().optional(),
   created_at: z.string().optional(),
@@ -83,7 +85,7 @@ export const CommissionStatusEnum = z.enum(["calculated", "withdrawn"]);
 
 export const CommissionSchema = z.object({
   id: z.string().uuid().optional(),
-  affiliate_id: z.string().uuid(),
+  partner_id: z.string().uuid().optional(),
   sale_id: z.string().uuid(),
   amount: z.number().nonnegative(),
   status: CommissionStatusEnum.default("calculated"),
@@ -94,7 +96,7 @@ export type Commission = z.infer<typeof CommissionSchema>;
 // ==========================================
 // 6. WITHDRAWAL SCHEMA
 // ==========================================
-export const WithdrawalStatusEnum = z.enum(["pending", "processing", "completed", "rejected"]);
+export const WithdrawalStatusEnum = z.enum(["pending", "processing", "completed", "rejected", "cancelled"]);
 
 export const WithdrawalInputSchema = z.object({
   amount: z.number().positive("Withdrawal amount must be greater than 0"),
@@ -104,7 +106,7 @@ export const WithdrawalInputSchema = z.object({
 
 export const WithdrawalSchema = WithdrawalInputSchema.extend({
   id: z.string().uuid().optional(),
-  affiliate_id: z.string().uuid(),
+  partner_id: z.string().uuid().optional(),
   status: WithdrawalStatusEnum.default("pending"),
   proof_url: z.string().nullable().optional(),
   proof_public_id: z.string().nullable().optional(),

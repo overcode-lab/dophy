@@ -1,5 +1,5 @@
 -- ====================================================================
--- DOPHY AFFILIATE APPLICATION - CLEAR ALL DATA SCRIPT
+-- DOPHY PARTNER APPLICATION - CLEAR ALL DATA SCRIPT
 -- ====================================================================
 -- Description: Empties all records from tables while keeping schema,
 --              triggers, and RLS policies intact.
@@ -12,6 +12,6 @@ TRUNCATE TABLE
     public.commissions,
     public.sales,
     public.products,
-    public.affiliates,
+    public.partners,
     public.admins
 RESTART IDENTITY CASCADE;

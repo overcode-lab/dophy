@@ -4,10 +4,10 @@ import React from "react";
 import Image from "next/image";
 
 interface FooterProps {
-  variant?: "admin" | "affiliate";
+  variant?: "admin" | "partner";
 }
 
-export const Footer: React.FC<FooterProps> = ({ variant = "affiliate" }) => {
+export const Footer: React.FC<FooterProps> = ({ variant = "partner" }) => {
   const isAdmin = variant === "admin";
 
   return (

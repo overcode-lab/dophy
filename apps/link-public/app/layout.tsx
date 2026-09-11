@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "DOPHY — You Need Dopamine",
-  description: "Link resmi DOPHY (Dopamine Snack) — Pesan Snack, daftar affiliate, & media sosial resmi.",
+  description: "Link resmi DOPHY (Dopamine Snack) — Pesan Snack, daftar Creator Partner, & media sosial resmi.",
   manifest: "/manifest.json",
   icons: {
     icon: [{ url: "/assets/logo-transparent.png", type: "image/png" }],

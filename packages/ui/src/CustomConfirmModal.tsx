@@ -58,78 +58,81 @@ export function CustomConfirmModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden">
           {/* Backdrop Overlay with Glass Blur */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity cursor-pointer"
           />
 
-          {/* Dialog Panel - Premium Glassmorphism Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 15 }}
-            transition={{ type: "spring", damping: 26, stiffness: 360 }}
-            className="relative w-full max-w-[400px] bg-white/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.18)] border border-white/80 ring-1 ring-slate-900/5 z-10 space-y-5 text-left overflow-hidden"
-          >
-            {/* Top Ambient Glow inside card */}
-            <div className={`absolute -top-16 -left-16 w-44 h-44 bg-gradient-to-br ${bgGlowMap[variant]} rounded-full blur-2xl opacity-70 pointer-events-none`} />
+          {/* Dialog Flex Centering Wrapper */}
+          <div className="flex min-h-full items-center justify-center p-4 sm:p-6 text-center">
+            {/* Dialog Panel - Premium Glassmorphism Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 15 }}
+              transition={{ type: "spring", damping: 26, stiffness: 360 }}
+              className="relative w-full max-w-sm sm:max-w-[400px] bg-white/95 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.18)] border border-white/80 ring-1 ring-slate-900/5 z-10 space-y-5 text-left overflow-hidden mx-auto"
+            >
+              {/* Top Ambient Glow inside card */}
+              <div
+                className={`absolute -top-16 -left-16 w-44 h-44 bg-gradient-to-br ${bgGlowMap[variant]} rounded-full blur-2xl opacity-70 pointer-events-none`}
+              />
 
-            {/* Header: Icon Badge & Close Button */}
-            <div className="relative flex items-center justify-between gap-3">
-              <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center shadow-sm backdrop-blur-sm ${iconBadgeMap[variant]}`}>
-                {iconMap[variant]}
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                disabled={isLoading}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Body Content */}
-            <div className="relative space-y-2.5">
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
-                {title}
-              </h3>
-              <p className="text-sm sm:text-base font-semibold text-slate-600 leading-relaxed">
-                {description}
-              </p>
-            </div>
-
-            {/* Footer Action Buttons (Stacked Vertically - 1 Full Row Per Button) */}
-            <div className="relative flex flex-col gap-2.5 pt-2">
-              <button
-                type="button"
-                onClick={onConfirm}
-                disabled={isLoading}
-                className={`w-full py-3.5 px-6 rounded-2xl text-sm font-black transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer ${confirmBtnMap[variant]}`}
-              >
-                {isLoading && (
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                )}
-                <span>{confirmText}</span>
-              </button>
-
-              {cancelText && (
+              {/* Header: Icon Badge & Close Button */}
+              <div className="relative flex items-center justify-between gap-3">
+                <div
+                  className={`w-14 h-14 rounded-2xl border flex items-center justify-center shadow-xs backdrop-blur-sm ${iconBadgeMap[variant]}`}
+                >
+                  {iconMap[variant]}
+                </div>
                 <button
                   type="button"
                   onClick={onClose}
                   disabled={isLoading}
-                  className="w-full py-3 px-5 rounded-2xl border border-slate-200/90 bg-white/80 hover:bg-slate-100/90 text-sm font-extrabold text-slate-700 transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-2xs"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-colors cursor-pointer"
                 >
-                  {cancelText}
+                  <X className="w-5 h-5" />
                 </button>
-              )}
-            </div>
-          </motion.div>
+              </div>
+
+              {/* Body Content */}
+              <div className="relative space-y-2.5">
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">{title}</h3>
+                <p className="text-sm sm:text-base font-semibold text-slate-600 leading-relaxed">{description}</p>
+              </div>
+
+              {/* Footer Action Buttons (Stacked Vertically - 1 Full Row Per Button) */}
+              <div className="relative flex flex-col gap-2.5 pt-2">
+                <button
+                  type="button"
+                  onClick={onConfirm}
+                  disabled={isLoading}
+                  className={`w-full py-3.5 px-6 rounded-2xl text-sm font-black transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer ${confirmBtnMap[variant]}`}
+                >
+                  {isLoading && (
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  )}
+                  <span>{confirmText}</span>
+                </button>
+
+                {cancelText && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    disabled={isLoading}
+                    className="w-full py-3 px-5 rounded-2xl border border-slate-200/90 bg-white/80 hover:bg-slate-100/90 text-sm font-extrabold text-slate-700 transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-2xs"
+                  >
+                    {cancelText}
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </div>
         </div>
       )}
     </AnimatePresence>

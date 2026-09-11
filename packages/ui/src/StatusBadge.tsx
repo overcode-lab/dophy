@@ -5,6 +5,8 @@ export type StatusType =
   | "processing"
   | "completed"
   | "rejected"
+  | "cancelled"
+  | "canceled"
   | "active"
   | "inactive"
   | "calculated"
@@ -39,6 +41,16 @@ export function StatusBadge({ status, label, className = "" }: StatusBadgeProps)
       bg: "bg-rose-50 text-rose-700",
       border: "border-rose-200/80",
       defaultLabel: "Ditolak ❌",
+    },
+    cancelled: {
+      bg: "bg-slate-100 text-slate-600",
+      border: "border-slate-200/90",
+      defaultLabel: "Dibatalkan 🚫",
+    },
+    canceled: {
+      bg: "bg-slate-100 text-slate-600",
+      border: "border-slate-200/90",
+      defaultLabel: "Dibatalkan 🚫",
     },
     active: {
       bg: "bg-emerald-50 text-emerald-700",

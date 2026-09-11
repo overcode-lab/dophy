@@ -41,7 +41,7 @@ const navigationItems = [
   },
   {
     title: "Transaksi Penjualan",
-    subtitle: "Daftar transaksi & komisi",
+    subtitle: "Daftar transaksi & royalti",
     href: "/admin/sales",
     icon: ShoppingBag,
     iconBg: "bg-emerald-50 text-emerald-600 border-emerald-200/90",
@@ -56,9 +56,9 @@ const navigationItems = [
     activeBg: "bg-sky-500/10 border-sky-400 text-sky-950 shadow-xs ring-1 ring-sky-500/20",
   },
   {
-    title: "Manajemen Affiliator",
-    subtitle: "Kelola mitra & target",
-    href: "/admin/affiliators",
+    title: "Creator Partner",
+    subtitle: "Kelola Creator Partner",
+    href: "/admin/partners",
     icon: Users,
     iconBg: "bg-indigo-50 text-indigo-600 border-indigo-200/90",
     activeBg: "bg-indigo-500/10 border-indigo-400 text-indigo-950 shadow-xs ring-1 ring-indigo-500/20",
@@ -76,13 +76,7 @@ const navigationItems = [
 /**
  * Shared Menu Links Content
  */
-function SideMenuNavLinks({
-  onItemClick,
-  isDesktop = false,
-}: {
-  onItemClick?: () => void;
-  isDesktop?: boolean;
-}) {
+function SideMenuNavLinks({ onItemClick, isDesktop = false }: { onItemClick?: () => void; isDesktop?: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -90,9 +84,7 @@ function SideMenuNavLinks({
       {/* Mobile only section label */}
       {!isDesktop && (
         <div className="px-2 py-0.5">
-          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-            Menu Operasional
-          </span>
+          <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Menu Operasional</span>
         </div>
       )}
 
@@ -188,7 +180,7 @@ export function SideMenu({ isOpen, onClose, onLogoutClick }: SideMenuProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+        <div className="fixed inset-0 z-50 overflow-hidden lg:hidden">
           {/* Backdrop Overlay with Glass Blur */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -204,7 +196,7 @@ export function SideMenu({ isOpen, onClose, onLogoutClick }: SideMenuProps) {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 320 }}
-            className="relative w-[80%] max-w-[340px] bg-white/85 backdrop-blur-2xl h-full shadow-2xl z-10 flex flex-col justify-between overflow-hidden border-r border-white/60 text-left"
+            className="fixed top-0 bottom-0 left-0 w-[80%] max-w-[340px] bg-white/85 backdrop-blur-2xl h-full shadow-2xl z-10 flex flex-col justify-between overflow-hidden border-r border-white/60 text-left"
           >
             {/* Ambient Glass Glow */}
             <div className="absolute -top-16 -left-16 w-48 h-48 bg-gradient-to-br from-orange-500/20 to-transparent rounded-full blur-2xl pointer-events-none" />

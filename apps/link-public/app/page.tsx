@@ -81,14 +81,17 @@ export default function LinktreePage() {
       animClass: "anim-play-jelly-1",
     },
     {
-      id: "affiliate",
+      id: "partner",
       title: "Program Creator Partner",
-      subtitle: "Gabung & Dapatkan Komisi",
-      url: process.env.NEXT_PUBLIC_AFFILIATE_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://affiliate.dophy.my.id",
+      subtitle: "Gabung & Dapatkan Creator Royalty",
+      url:
+        process.env.NEXT_PUBLIC_PARTNER_APP_URL ||
+        process.env.NEXT_PUBLIC_APP_URL ||
+        "https://partner.dophy.my.id",
       icon: Users,
       badge: "Mitra Bisnis",
       badgeStyle: "bg-dophy-100 text-dophy-800 border-dophy-200 anim-badge-fast-2",
-      variant: "affiliate",
+      variant: "partner",
       iconColor: "text-dophy-600",
       animClass: "anim-play-pop-2",
     },
@@ -194,8 +197,8 @@ export default function LinktreePage() {
               tiktok: "bg-rose-50/60 border-rose-200/60 hover:bg-rose-100/70 hover:border-pink-300 shadow-sm",
               instagram:
                 "bg-purple-50/70 border-purple-200/60 hover:bg-purple-100/70 hover:border-purple-300 shadow-sm",
-              affiliate: "bg-amber-50/70 border-amber-200/60 hover:bg-amber-100/70 hover:border-amber-300 shadow-sm",
-            }[item.variant];
+              partner: "bg-amber-50/70 border-amber-200/60 hover:bg-amber-100/70 hover:border-amber-300 shadow-sm",
+            }[item.variant as "whatsapp" | "tiktok" | "instagram" | "partner"];
 
             return (
               <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="block group">

@@ -89,25 +89,25 @@ export async function uploadToCloudinary(
 }
 
 /**
- * Specialized Cloudinary Uploader per Affiliate:
- * Generates path: dophy/{env}/affiliators/{referralCode}_{slugName}/{folderType}/
+ * Specialized Cloudinary Uploader per Partner:
+ * Generates path: dophy/{env}/partners/{referralCode}_{slugName}/{folderType}/
  */
-export async function uploadAffiliateAssetToCloudinary({
+export async function uploadPartnerAssetToCloudinary({
   file,
   referralCode,
-  affiliateName,
+  partnerName,
   folderType, // 'withdrawals' | 'sales-receipts'
   customFileName,
 }: {
   file: File | Blob;
   referralCode: string;
-  affiliateName: string;
+  partnerName: string;
   folderType: "withdrawals" | "sales-receipts";
   customFileName?: string;
 }): Promise<{ url: string; public_id: string }> {
   const { env } = getCloudinaryConfig();
-  const affiliateFolderSlug = `${referralCode}_${slugify(affiliateName)}`;
-  const folderPath = `dophy/${env || "production"}/affiliators/${affiliateFolderSlug}/${folderType}`;
+  const partnerFolderSlug = `${referralCode}_${slugify(partnerName)}`;
+  const folderPath = `dophy/${env || "production"}/partners/${partnerFolderSlug}/${folderType}`;
 
   return uploadToCloudinary(file, folderPath, customFileName);
 }

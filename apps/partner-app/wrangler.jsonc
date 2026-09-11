@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dophy-partner-app",
+  "account_id": "ccb155070ecee2a870e620ebf6ffc56a",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2024-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "partner.dophy.my.id",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://jjtvvqrpaqxqvbhoylnb.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqdHZ2cXJwYXF4cXZiaG95bG5iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4OTgyOTksImV4cCI6MjEwNDQ3NDI5OX0.ZUhCFL2KELtjlx0pGCfblLuFz1iFNn1B6dzMe1P6CXE",
+    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_Aj7EJ3XyCEmr_sRhWpoViQ_a06l5101",
+    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME": "ag1msevp",
+    "NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET": "dophy_uploads",
+    "NEXT_PUBLIC_APP_URL": "https://partner.dophy.my.id",
+    "NEXT_PUBLIC_DEFAULT_REFERRAL_PREFIX": "DOPHY-"
+  },
+  "kv_namespaces": [
+    // Add KV bindings if required for caching or sessions
+  ]
+}

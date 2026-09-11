@@ -69,14 +69,16 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   if (fullPage) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-slate-50/90 backdrop-blur-xl flex items-center justify-center min-h-screen"
-      >
-        {content}
-      </motion.div>
+      <div className="min-h-[100dvh] w-full flex items-center justify-center bg-slate-50/90 backdrop-blur-xl">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="w-full flex items-center justify-center"
+        >
+          {content}
+        </motion.div>
+      </div>
     );
   }
 
