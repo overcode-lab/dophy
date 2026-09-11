@@ -7,8 +7,8 @@ import { X } from "lucide-react";
 export interface ResponsiveDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
-  subtitle?: string;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;
 }
@@ -45,27 +45,38 @@ export function ResponsiveDetailModal({
               className="relative w-full h-[100dvh] sm:h-auto sm:max-h-[85vh] sm:max-w-lg bg-white rounded-none sm:rounded-3xl shadow-2xl border-0 sm:border sm:border-slate-100 flex flex-col z-10 overflow-hidden text-left mx-auto"
             >
               {/* Top Handle Indicator for Mobile */}
-              <div className="sm:hidden w-full flex items-center justify-center pt-3 pb-1 shrink-0">
-                <div className="w-12 h-1.5 rounded-full bg-slate-200" />
+              <div className="sm:hidden w-full flex items-center justify-center pt-2 pb-0.5 shrink-0">
+                <div className="w-10 h-1 rounded-full bg-slate-200" />
               </div>
 
               {/* Modal Header */}
-              <div className="px-4 sm:px-6 pt-3 pb-4 border-b border-slate-100 flex items-center justify-between gap-4 bg-white sticky top-0 z-20 shrink-0">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 tracking-tight">{title}</h3>
-                  {subtitle && <p className="text-xs font-medium text-slate-500 mt-0.5">{subtitle}</p>}
+              <div className="px-4 sm:px-6 py-2.5 sm:py-3 border-b border-slate-100 flex items-center justify-between gap-3 bg-white sticky top-0 z-20 shrink-0">
+                <div className="min-w-0 flex-1">
+                  {typeof title === "string" ? (
+                    <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight truncate">{title}</h3>
+                  ) : (
+                    title
+                  )}
+                  {subtitle && (
+                    typeof subtitle === "string" ? (
+                      <p className="text-xs font-medium text-slate-500 mt-0.5">{subtitle}</p>
+                    ) : (
+                      <div className="mt-1 flex items-center">{subtitle}</div>
+                    )
+                  )}
                 </div>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                  title="Tutup"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Modal Scrollable Body */}
-              <div className="flex-1 px-4 py-4 sm:px-6 sm:py-5 overflow-y-auto space-y-4 font-sans text-slate-700 text-sm">
+              <div className="flex-1 px-4 py-3 sm:px-6 sm:py-4 overflow-y-auto space-y-3 font-sans text-slate-700 text-sm">
                 {children}
               </div>
 

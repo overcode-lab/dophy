@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   Award,
   Menu,
+  Clock,
 } from "lucide-react";
 import {
   StatusBadge,
@@ -222,8 +223,8 @@ export default function AdminPartnersPage() {
             <section className="text-left space-y-1">
               <h2 className="text-2xl font-black text-slate-900 tracking-tight">Kelola Creator Partner 👥</h2>
               <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
-                Daftar partner terdaftar, kelola status aktif/nonaktif, monitoring target, serta informasi
-                pencairan royalti.
+                Daftar partner terdaftar, kelola status aktif/nonaktif, monitoring target, serta informasi pencairan
+                royalti.
               </p>
             </section>
 
@@ -393,33 +394,37 @@ export default function AdminPartnersPage() {
       <ResponsiveDetailModal
         isOpen={Boolean(selectedPartner)}
         onClose={() => setSelectedPartner(null)}
-        title="Pengaturan Creator Partner"
+        title="Creator Partner"
         subtitle={
-          selectedPartner?.full_name ? `Detail Partner: ${selectedPartner.full_name}` : "Kelola status partner"
+          selectedPartner?.full_name ? (
+            <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-gradient-to-r from-orange-50 to-amber-50 text-dophy-700 border border-orange-200/90 text-xs font-black capitalize shadow-2xs">
+                {selectedPartner.full_name}
+              </span>
+              <StatusBadge status={selectedPartner.status} className="!text-[10px] !py-0.5 !px-2" />
+            </div>
+          ) : undefined
         }
-      >  {selectedPartner && (
-          <div className="space-y-4 text-left py-1">
-            {/* User Contact Header (No Initial Avatar Box) */}
-            <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100">
-              <div className="space-y-0.5">
-                <h4 className="font-black text-slate-900 text-base capitalize leading-snug">
-                  {selectedPartner.full_name}
-                </h4>
-                <p className="text-xs text-slate-400 font-semibold">{selectedPartner.email}</p>
-              </div>
-
-              <StatusBadge status={selectedPartner.status} />
+      >
+        {selectedPartner && (
+          <div className="space-y-3 text-left py-0.5">
+            {/* Email Bar */}
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1 shadow-2xs">
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Email Partner</span>
+              <p className="font-bold text-xs sm:text-sm text-slate-800 tracking-wide truncate">
+                {selectedPartner.email}
+              </p>
             </div>
 
-            {/* STRUCTURED MICRO DASHBOARD (1 ROW / ITEM) */}
-            <div className="grid grid-cols-1 gap-2.5 text-xs">
-              {/* Creator Code Box (1 Row) */}
-              <div className="p-3 rounded-2xl bg-orange-50/80 border border-orange-200/90 flex items-center justify-between gap-2 shadow-2xs">
-                <div>
-                  <span className="text-[9px] font-black text-orange-500 uppercase tracking-widest block">
+            {/* 2. Structured Micro Dashboard (1 Row / Item) */}
+            <div className="space-y-2 text-xs">
+              {/* Row 1: Creator Code Box */}
+              <div className="p-2.5 sm:p-3 rounded-2xl bg-orange-50/80 border border-orange-200/90 flex items-center justify-between gap-3 shadow-2xs">
+                <div className="min-w-0 space-y-0.5">
+                  <span className="text-[9px] font-black text-orange-600 uppercase tracking-widest block">
                     Creator Code Unik
                   </span>
-                  <span className="font-mono font-black text-sm text-dophy-700 tracking-wide">
+                  <span className="font-mono font-black text-xs sm:text-sm text-dophy-700 tracking-wide block truncate">
                     {selectedPartner.referral_code || "DOPHY-..."}
                   </span>
                 </div>
@@ -427,67 +432,86 @@ export default function AdminPartnersPage() {
                 <button
                   type="button"
                   onClick={() => handleCopyReferral(selectedPartner.referral_code)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
-                    copiedCode === selectedPartner.referral_code
-                      ? "bg-emerald-600 text-white shadow-emerald-500/20"
-                      : "bg-white text-dophy-700 border border-orange-200 hover:bg-orange-100 shadow-2xs"
-                  }`}
+                  className="p-1 text-dophy-600 hover:text-dophy-800 transition-colors cursor-pointer shrink-0"
+                  title="Salin Creator Code"
                 >
                   {copiedCode === selectedPartner.referral_code ? (
-                    <>
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Tersalin!</span>
-                    </>
+                    <Check className="w-4 h-4 text-emerald-600" />
                   ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-dophy-600" />
-                      <span>Salin</span>
-                    </>
+                    <Copy className="w-4 h-4" />
                   )}
                 </button>
               </div>
 
-              {/* Rekening / Wallet Box (1 Row) */}
-              <div className="p-3 rounded-2xl bg-sky-50/60 border border-sky-200/80 flex items-center justify-between gap-2 shadow-2xs">
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-black text-sky-700 uppercase tracking-wider block flex items-center gap-1">
-                    <Building className="w-3 h-3 text-sky-600" />
-                    <span>Rekening Bank / Wallet</span>
+              {/* Row 2: Rekening Bank / Wallet Box */}
+              <div className="relative p-2.5 sm:p-3 rounded-2xl bg-sky-50/60 border border-sky-200/80 space-y-2 shadow-2xs">
+                {/* Top Row: Bank Title & Badge Side-by-Side */}
+                <div className="flex items-center gap-1.5 flex-wrap pr-8">
+                  <span className="font-black text-xs sm:text-sm text-slate-900 uppercase tracking-wide">
+                    {selectedPartner.bank_name || "Bank / E-Wallet"}
                   </span>
-                  <p className="font-black text-slate-900 text-xs">
-                    {selectedPartner.bank_name || "Belum Didaftarkan"}
-                  </p>
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white text-sky-800 border border-sky-200/80 shadow-2xs flex items-center gap-1">
+                    <Building className="w-3 h-3 text-sky-600" />
+                    <span>Rekening / Wallet</span>
+                  </span>
                 </div>
-                <p className="text-xs font-mono font-black text-sky-900 bg-white px-2.5 py-1 rounded-xl border border-sky-200/80">
-                  {selectedPartner.bank_account_number || "-"}
+
+                {/* Bottom Row: Nomor Rekening with generous gap space */}
+                <p className="font-mono font-black text-sm sm:text-base text-slate-900 tracking-wider truncate">
+                  {selectedPartner.bank_account_number || "Belum Didaftarkan"}
                 </p>
+
+                {/* Absolute Top-Right Copy Button (Icon only without wrapper) */}
+                {selectedPartner.bank_account_number && (
+                  <button
+                    type="button"
+                    onClick={() => handleCopyReferral(selectedPartner.bank_account_number)}
+                    className="absolute top-0 right-1 sm:top-3 sm:right-3 p-1 text-sky-600 hover:text-sky-800 transition-colors cursor-pointer"
+                    title="Salin Nomor Rekening"
+                  >
+                    {copiedCode === selectedPartner.bank_account_number ? (
+                      <Check className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                  </button>
+                )}
               </div>
 
-              {/* Saldo Royalty & Target Box (1 Row) */}
-              <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 flex items-center justify-between gap-2 shadow-2xs">
-                <div className="space-y-0.5">
-                  <span className="text-[9px] font-black text-emerald-700 uppercase tracking-wider flex items-center gap-1">
-                    <Wallet className="w-3 h-3 text-emerald-600" />
-                    <span>Saldo Royalti Ready</span>
+              {/* Row 3: Saldo Royalti Ready */}
+              <div className="p-2.5 sm:p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between gap-3 shadow-2xs">
+                <div className="min-w-0 space-y-0.5 flex-1">
+                  <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                    <Wallet className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Saldo Ready</span>
                   </span>
-                  <p className="font-black text-emerald-700 text-sm">
-                    Rp {Number(selectedPartner.available_balance || 0).toLocaleString("id-ID")}
-                  </p>
+                  <p className="text-[10px] text-emerald-700/80 font-medium">Saldo siap ditarik/dicairkan</p>
                 </div>
-                <div className="text-right">
-                  <span className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">
-                    Target Partner
-                  </span>
-                  <span className="text-xs font-black text-slate-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200/80 inline-block mt-0.5 shadow-2xs">
-                    {selectedPartner.sales_target || 50} Pcs
-                  </span>
-                </div>
+                <strong className="font-mono font-black text-xs sm:text-sm text-emerald-950 shrink-0">
+                  Rp {Number(selectedPartner.available_balance || 0).toLocaleString("id-ID")}
+                </strong>
               </div>
+
+              {/* Row 4: Saldo Hold (Hanya ditampilkan jika > 0) */}
+              {Number(selectedPartner.held_balance || 0) > 0 && (
+                <div className="p-2.5 sm:p-3 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-center justify-between gap-3 shadow-2xs">
+                  <div className="min-w-0 space-y-0.5 flex-1">
+                    <span className="text-xs font-black text-amber-900 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span>Saldo Hold</span>
+                    </span>
+                    <p className="text-[10px] text-amber-700/80 font-medium">Proses Pengajuan Pencairan Dana</p>
+                  </div>
+                  <strong className="font-mono font-black text-xs sm:text-sm text-amber-950 shrink-0">
+                    Rp {Number(selectedPartner.held_balance || 0).toLocaleString("id-ID")}
+                  </strong>
+                </div>
+              )}
             </div>
 
-            {/* FORM CONTROLS (COMPACT & CLEAN) */}
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block">
+            {/* 3. Status Akun Selector (1 Row / Item) */}
+            <div className="space-y-2 pt-1.5 border-t border-slate-100">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">
                 Status Akun Partner
               </label>
 
@@ -498,29 +522,27 @@ export default function AdminPartnersPage() {
                   onClick={() => setStatusInput("active")}
                   className={`w-full p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${
                     statusInput === "active"
-                      ? "border-emerald-500 bg-emerald-50/80 shadow-xs shadow-emerald-500/10 ring-2 ring-emerald-500/20"
-                      : "border-slate-200 bg-white hover:border-slate-300 text-slate-600 hover:bg-slate-50/60"
+                      ? "border-emerald-500 bg-emerald-50/80 shadow-xs ring-1 ring-emerald-500/20"
+                      : "border-slate-200/90 bg-white hover:border-slate-300 text-slate-600 hover:bg-slate-50/60"
                   }`}
                 >
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-2xs transition-colors ${
-                        statusInput === "active" ? "bg-emerald-600 text-white" : "border-2 border-slate-300 bg-white"
-                      }`}
-                    >
-                      {statusInput === "active" && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  <div className="min-w-0 space-y-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-black text-xs sm:text-sm text-slate-900">Partner Aktif</span>
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black">
+                        🟢 Active
+                      </span>
                     </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-xs text-slate-900">Partner Aktif</span>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black whitespace-nowrap">
-                          🟢 Active
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 font-medium leading-normal mt-0.5">
-                        Creator Code & pencairan saldo royalti berjalan normal.
-                      </p>
-                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      Creator Code & pencairan saldo royalti berjalan normal.
+                    </p>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 shadow-2xs transition-colors ${
+                      statusInput === "active" ? "bg-emerald-600 text-white" : "border-2 border-slate-300 bg-white"
+                    }`}
+                  >
+                    {statusInput === "active" && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                   </div>
                 </button>
 
@@ -530,46 +552,44 @@ export default function AdminPartnersPage() {
                   onClick={() => setStatusInput("inactive")}
                   className={`w-full p-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${
                     statusInput === "inactive"
-                      ? "border-rose-500 bg-rose-50/80 shadow-xs shadow-rose-500/10 ring-2 ring-rose-500/20"
-                      : "border-slate-200 bg-white hover:border-slate-300 text-slate-600 hover:bg-slate-50/60"
+                      ? "border-rose-500 bg-rose-50/80 shadow-xs ring-1 ring-rose-500/20"
+                      : "border-slate-200/90 bg-white hover:border-slate-300 text-slate-600 hover:bg-slate-50/60"
                   }`}
                 >
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 shadow-2xs transition-colors ${
-                        statusInput === "inactive" ? "bg-rose-600 text-white" : "border-2 border-slate-300 bg-white"
-                      }`}
-                    >
-                      {statusInput === "inactive" && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  <div className="min-w-0 space-y-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-black text-xs sm:text-sm text-slate-900">Partner Nonaktif</span>
+                      <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-black">
+                        🔴 Suspend
+                      </span>
                     </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-xs text-slate-900">Partner Nonaktif</span>
-                        <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-black whitespace-nowrap">
-                          🔴 Suspend
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 font-medium leading-normal mt-0.5">
-                        Akun dibekukan. Creator Code & pencairan dinonaktifkan.
-                      </p>
-                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      Akun dibekukan. Creator Code & pencairan dinonaktifkan.
+                    </p>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 shadow-2xs transition-colors ${
+                      statusInput === "inactive" ? "bg-rose-600 text-white" : "border-2 border-slate-300 bg-white"
+                    }`}
+                  >
+                    {statusInput === "inactive" && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                   </div>
                 </button>
               </div>
             </div>
 
-            {/* Action Buttons: Simpan (Top Row), Hapus & Batal (Bottom Row) */}
-            <div className="pt-3.5 space-y-2.5 border-t border-slate-100">
-              {/* Row 1: Primary Simpan Button */}
+            {/* 4. Action Buttons: Simpan & Hapus/Batal */}
+            <div className="pt-2 space-y-2 border-t border-slate-100">
+              {/* Primary Simpan Button */}
               <button
                 type="button"
                 onClick={handleSaveUpdate}
                 disabled={isUpdating}
-                className="w-full h-11 rounded-2xl bg-dophy-600 hover:bg-dophy-700 text-white font-black text-xs shadow-md shadow-dophy-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] disabled:opacity-50"
+                className="w-full h-10 rounded-xl bg-dophy-600 hover:bg-dophy-700 text-white font-black text-xs shadow-md shadow-dophy-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] disabled:opacity-50"
               >
                 {isUpdating ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Menyimpan...</span>
                   </>
                 ) : (
@@ -580,8 +600,8 @@ export default function AdminPartnersPage() {
                 )}
               </button>
 
-              {/* Row 2: Secondary Buttons (Hapus & Batal 1 Row) */}
-              <div className="grid grid-cols-2 gap-2.5">
+              {/* Secondary Buttons: Hapus & Batal */}
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -589,10 +609,10 @@ export default function AdminPartnersPage() {
                     setPartnerToDelete(selectedPartner);
                   }}
                   disabled={isUpdating}
-                  className="w-full h-10 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-black transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="w-full h-9 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/80 text-xs font-black transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                   title="Hapus Data Partner"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5" />
                   <span>Hapus Partner</span>
                 </button>
 
@@ -600,7 +620,7 @@ export default function AdminPartnersPage() {
                   type="button"
                   onClick={() => setSelectedPartner(null)}
                   disabled={isUpdating}
-                  className="w-full h-10 rounded-xl border border-slate-200 hover:bg-slate-100 text-xs font-extrabold text-slate-700 transition-colors flex items-center justify-center cursor-pointer"
+                  className="w-full h-9 rounded-xl border border-slate-200 hover:bg-slate-100 text-xs font-bold text-slate-700 transition-colors flex items-center justify-center cursor-pointer"
                 >
                   Batal
                 </button>

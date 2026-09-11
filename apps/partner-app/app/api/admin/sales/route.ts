@@ -34,10 +34,10 @@ export async function GET(request: Request) {
       products = fallback.data;
     }
 
-    // 2. Fetch active partners for autocomplete dropdown
+    // 2. Fetch active partners for autocomplete/modal dropdown
     const { data: partners } = await supabaseAdmin
       .from("partners")
-      .select("id, full_name, email, referral_code")
+      .select("id, full_name, email, referral_code, available_balance, held_balance")
       .eq("status", "active")
       .order("full_name");
 

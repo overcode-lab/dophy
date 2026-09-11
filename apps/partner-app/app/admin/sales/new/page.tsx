@@ -16,6 +16,11 @@ import {
   Coins,
   Receipt,
   Menu,
+  UserCheck,
+  Users,
+  X,
+  Wallet,
+  Clock,
 } from "lucide-react";
 import { CustomConfirmModal, ResponsiveDetailModal, LoadingSpinner, Footer, SideMenu, SideMenuDesktop } from "@repo/ui";
 import { SalesReceiptModal, SalesReceiptData } from "../components/SalesReceiptModal";
@@ -35,8 +40,9 @@ export default function AdminNewSalePage() {
   const [referralCodeInput, setReferralCodeInput] = useState("");
   const [selectedPartner, setSelectedPartner] = useState<any>(null);
 
-  // Autocomplete UI State
-  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  // Creator Modal State & Search
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+  const [partnerSearch, setPartnerSearch] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [generalError, setGeneralError] = useState("");
@@ -82,9 +88,9 @@ export default function AdminNewSalePage() {
   const totalPrice = (selectedProduct ? Number(selectedProduct.price) : 0) * reqQty;
   const commissionPreview = selectedPartner || referralCodeInput ? reqQty * 3000 : 0;
 
-  // Filter partners for autocomplete
+  // Filter partners for modal list
   const filteredPartners = partners.filter((a) => {
-    const query = referralCodeInput.toLowerCase().trim();
+    const query = partnerSearch.toLowerCase().trim();
     if (!query) return true;
     return (
       a.referral_code?.toLowerCase().includes(query) ||
@@ -96,7 +102,7 @@ export default function AdminNewSalePage() {
   const handleSelectPartner = (partner: any) => {
     setSelectedPartner(partner);
     setReferralCodeInput(partner.referral_code);
-    setShowAutocomplete(false);
+    setIsPartnerModalOpen(false);
   };
 
   const validateForm = () => {
@@ -303,7 +309,7 @@ export default function AdminNewSalePage() {
                 {errors.productId && <p className="text-[11px] font-semibold text-rose-500">{errors.productId}</p>}
               </div>
 
-              {/* Row 2: Jumlah Pcs + Kode Referral (1 Single Row) */}
+              {/* Row 2: Jumlah Pcs + Creator Code Modal Trigger (1 Single Row) */}
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
                 {/* Quantity Input (1 Col) */}
                 <div className="col-span-1 space-y-1">
@@ -322,46 +328,58 @@ export default function AdminNewSalePage() {
                   {errors.quantity && <p className="text-[11px] font-semibold text-rose-500">{errors.quantity}</p>}
                 </div>
 
-                {/* Smart Autocomplete Referral Code Input (2 Cols) */}
-                <div className="col-span-2 space-y-1 relative">
-                  <label className="text-xs font-bold text-slate-700 block truncate">
-                    Creator Code <span className="text-slate-400 font-normal">(Opsional)</span>
-                  </label>
-                  <div className="relative">
-                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Ketik nama / Creator Code..."
-                      value={referralCodeInput}
-                      onChange={(e) => {
-                        setReferralCodeInput(e.target.value);
-                        setSelectedPartner(null);
-                        setShowAutocomplete(true);
-                      }}
-                      onFocus={() => setShowAutocomplete(true)}
-                      className="w-full pl-9 sm:pl-10 pr-3.5 py-2.5 rounded-2xl border border-slate-200/90 text-sm font-bold bg-white focus:border-dophy-500 focus:ring-2 focus:ring-dophy-100 outline-none shadow-2xs"
-                    />
+                {/* Creator Code Trigger Button (2 Cols) */}
+                <div className="col-span-2 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-700 block truncate">
+                      Creator Code <span className="text-slate-400 font-normal">(Opsional)</span>
+                    </label>
+                    {selectedPartner && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPartner(null);
+                          setReferralCodeInput("");
+                        }}
+                        className="text-[10px] font-bold text-rose-500 hover:text-rose-700 cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    )}
                   </div>
-
-                  {/* Autocomplete Dropdown List */}
-                  {showAutocomplete && referralCodeInput && filteredPartners.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl border border-slate-200 shadow-xl max-h-48 overflow-y-auto z-20 divide-y divide-slate-100">
-                      {filteredPartners.map((partner) => (
-                        <button
-                          key={partner.id}
-                          type="button"
-                          onClick={() => handleSelectPartner(partner)}
-                          className="w-full p-3 text-left hover:bg-dophy-50/60 transition-colors flex items-center justify-between cursor-pointer"
-                        >
-                          <div>
-                            <p className="text-xs font-extrabold text-slate-900">{partner.full_name}</p>
-                            <p className="text-[11px] font-mono font-bold text-dophy-600">{partner.referral_code}</p>
+                  <button
+                    type="button"
+                    onClick={() => setIsPartnerModalOpen(true)}
+                    className={`w-full px-3.5 py-2.5 rounded-2xl border text-sm font-bold bg-white text-left transition-all cursor-pointer flex items-center justify-between shadow-2xs group ${
+                      selectedPartner
+                        ? "border-emerald-300 bg-gradient-to-r from-emerald-50/50 via-white to-teal-50/40 ring-1 ring-emerald-400/20"
+                        : "border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/60 text-slate-400"
+                    }`}
+                  >
+                    <div className="min-w-0 flex-1 flex items-center gap-2">
+                      {selectedPartner ? (
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-xs sm:text-sm font-black text-slate-900 truncate capitalize">
+                              {selectedPartner.full_name}
+                            </span>
+                            <span className="text-[10px] font-mono font-black px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300/80">
+                              {selectedPartner.referral_code}
+                            </span>
                           </div>
-                          <span className="text-[10px] font-bold text-slate-400">{partner.email}</span>
-                        </button>
-                      ))}
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-slate-400">
+                          <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                          <span className="text-xs sm:text-sm font-semibold truncate text-slate-400">
+                            Pilih Creator Code...
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  )}
+                    <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0 ml-1.5" />
+                  </button>
                 </div>
               </div>
 
@@ -460,7 +478,6 @@ export default function AdminNewSalePage() {
         isOpen={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
         title="Pilih Produk Snack"
-        subtitle="Pilih varian snack yang dibeli konsumen"
       >
         <div className="space-y-2.5 text-left">
           {products.map((p) => {
@@ -515,6 +532,156 @@ export default function AdminNewSalePage() {
               </div>
             );
           })}
+        </div>
+      </ResponsiveDetailModal>
+
+      {/* Custom Creator Code Selection Modal */}
+      <ResponsiveDetailModal
+        isOpen={isPartnerModalOpen}
+        onClose={() => {
+          setIsPartnerModalOpen(false);
+          setPartnerSearch("");
+        }}
+        title="Pilih Creator Code"
+      >
+        <div className="space-y-3.5 text-left">
+          {/* In-Modal Search Input */}
+          <div className="relative">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Cari nama, Creator Code, atau email..."
+              value={partnerSearch}
+              onChange={(e) => setPartnerSearch(e.target.value)}
+              className="w-full pl-9 pr-9 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold bg-slate-50 focus:bg-white focus:border-dophy-500 focus:ring-2 focus:ring-dophy-100 outline-none transition-all shadow-2xs"
+            />
+            {partnerSearch && (
+              <button
+                type="button"
+                onClick={() => setPartnerSearch("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            {/* Special Option: Tanpa Creator Code */}
+            <div
+              onClick={() => {
+                setSelectedPartner(null);
+                setReferralCodeInput("");
+                setIsPartnerModalOpen(false);
+                setPartnerSearch("");
+              }}
+              className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 active:scale-[0.99] ${
+                !selectedPartner
+                  ? "bg-gradient-to-r from-slate-100 via-white to-slate-50 border-slate-400/80 shadow-xs ring-1 ring-slate-400/20"
+                  : "bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/60"
+              }`}
+            >
+              <div className="min-w-0 space-y-0.5">
+                <h4 className="text-sm sm:text-base font-black text-slate-800 flex items-center gap-1.5">
+                  <Users className="w-4 h-4 text-slate-500" />
+                  <span>Tanpa Creator Code</span>
+                </h4>
+                <p className="text-xs text-slate-500 font-medium">
+                  Transaksi reguler tanpa alokasi komisi Creator Royalty
+                </p>
+              </div>
+              <div
+                className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-all ${
+                  !selectedPartner ? "bg-slate-800 border-slate-800 text-white shadow-xs" : "border-slate-300 bg-white"
+                }`}
+              >
+                {!selectedPartner && <Check className="w-3 h-3 stroke-[3]" />}
+              </div>
+            </div>
+
+            {/* Creator List */}
+            {filteredPartners.length === 0 ? (
+              <div className="py-8 text-center space-y-1.5">
+                <Users className="w-8 h-8 text-slate-300 mx-auto" />
+                <p className="text-xs font-bold text-slate-500">Tidak ada creator yang cocok</p>
+                <p className="text-[10px] text-slate-400">Coba kata kunci pencarian nama atau kode lain</p>
+              </div>
+            ) : (
+              filteredPartners.map((partner) => {
+                const isSelected = selectedPartner?.id === partner.id;
+
+                return (
+                  <div
+                    key={partner.id}
+                    onClick={() => handleSelectPartner(partner)}
+                    className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden flex items-center justify-between gap-3 active:scale-[0.99] ${
+                      isSelected
+                        ? "bg-gradient-to-r from-emerald-50/95 via-white/80 to-teal-50/70 border-emerald-500 shadow-xs ring-1 ring-emerald-500/25"
+                        : "bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/60"
+                    }`}
+                  >
+                    {/* Background Illustration Watermark Icon */}
+                    <UserCheck
+                      className={`absolute -right-2 -bottom-2 w-16 h-16 pointer-events-none transition-transform duration-300 ${
+                        isSelected ? "text-emerald-500/15 scale-110 stroke-[1.2]" : "text-slate-400/10 stroke-[1.2]"
+                      }`}
+                    />
+
+                    {/* Left Info */}
+                    <div className="relative z-10 space-y-1.5 min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="text-sm sm:text-base font-black text-slate-900 tracking-tight capitalize">
+                          {partner.full_name}
+                        </h4>
+                        <span className="text-[11px] sm:text-xs font-mono font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200/80">
+                          {partner.referral_code}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium truncate">{partner.email}</p>
+
+                      {/* Saldo Information Badges (Ready & Hold) */}
+                      <div className="flex items-center gap-1.5 sm:gap-2 pt-0.5 flex-wrap">
+                        {/* Saldo Ready (Belum Diajukan) */}
+                        <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl bg-emerald-50/90 text-emerald-900 border border-emerald-200/90 shadow-2xs">
+                          <Wallet className="w-3 h-3 text-emerald-600 shrink-0" />
+                          <span className="text-[10px] text-emerald-700 font-bold">Ready:</span>
+                          <span className="text-[11px] sm:text-xs font-black text-emerald-950 font-mono">
+                            Rp {Number(partner.available_balance || 0).toLocaleString("id-ID")}
+                          </span>
+                        </div>
+
+                        {/* Saldo Hold (Sedang Diajukan) */}
+                        {Number(partner.held_balance || 0) > 0 ? (
+                          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-200/90 shadow-2xs">
+                            <Clock className="w-3 h-3 text-amber-600 shrink-0" />
+                            <span className="text-[10px] text-amber-700 font-bold">Hold:</span>
+                            <span className="text-[11px] sm:text-xs font-black text-amber-950 font-mono">
+                              Rp {Number(partner.held_balance || 0).toLocaleString("id-ID")}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-xl bg-slate-50 text-slate-500 border border-slate-200/70">
+                            <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span className="text-[10px] text-slate-400 font-medium">Hold:</span>
+                            <span className="text-[11px] sm:text-xs font-bold text-slate-500 font-mono">Rp 0</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right Checkbox */}
+                    <div
+                      className={`relative z-10 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-all ${
+                        isSelected ? "bg-emerald-600 border-emerald-600 text-white shadow-xs" : "border-slate-300 bg-white"
+                      }`}
+                    >
+                      {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
       </ResponsiveDetailModal>
 

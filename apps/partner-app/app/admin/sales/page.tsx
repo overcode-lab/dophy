@@ -13,7 +13,7 @@ import {
   Loader2,
   CheckCircle2,
 } from "lucide-react";
-import { Footer, SideMenu, SideMenuDesktop } from "@repo/ui";
+import { Footer, SideMenu, SideMenuDesktop, LoadingSpinner } from "@repo/ui";
 import { SaleItem, ProductInfo, PartnerInfo, DateFilterType, DateState, QuickDatePreset } from "./types";
 import {
   SalesMetricBanner,
@@ -392,9 +392,8 @@ export default function AdminSalesListPage() {
 
             {/* Sales List Grid */}
             {isLoading ? (
-              <div className="p-12 rounded-3xl bg-white border border-slate-200/80 shadow-xs text-center flex flex-col items-center justify-center gap-3">
-                <Loader2 className="w-7 h-7 text-dophy-600 animate-spin" />
-                <p className="text-xs font-bold text-slate-500">Mencari data transaksi di seluruh database...</p>
+              <div className="py-12 px-4 text-center flex flex-col items-center justify-center">
+                <LoadingSpinner text="Mencari data transaksi di seluruh database..." />
               </div>
             ) : salesHistory.length === 0 ? (
               <div className="p-10 rounded-3xl bg-white border border-slate-200/80 shadow-xs text-center space-y-3">

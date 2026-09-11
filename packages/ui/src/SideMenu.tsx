@@ -12,7 +12,6 @@ import {
   CheckSquare,
   Users,
   Package,
-  ExternalLink,
   LogOut,
   ChevronRight,
   ShieldCheck,
@@ -143,17 +142,21 @@ function SideMenuNavLinks({ onItemClick, isDesktop = false }: { onItemClick?: ()
         )}
         <Link
           href="/"
-          target="_blank"
-          className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-purple-500/10 border border-purple-200/90 hover:border-purple-300 flex items-center justify-between gap-2 text-left transition-all shadow-2xs group"
+          onClick={onItemClick}
+          className="group relative p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-purple-500/10 border border-purple-200/90 hover:border-purple-300 flex items-center justify-between gap-3 text-left transition-all shadow-2xs"
         >
-          <div className="space-y-0.5">
-            <span className="text-xs font-black text-slate-900 group-hover:text-purple-600 transition-colors flex items-center gap-1.5">
-              <span>Landing Page</span>
-              <Home className="w-3.5 h-3.5 text-purple-600" />
-            </span>
-            <p className="text-[10px] text-slate-500 font-semibold">Halaman utama website DOPHY</p>
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-50 text-purple-600 border border-purple-200/80 flex items-center justify-center shrink-0 shadow-2xs transition-transform group-hover:scale-105">
+              <Home className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1 text-left">
+              <h4 className="text-xs sm:text-sm font-black tracking-tight text-slate-900 group-hover:text-purple-600 transition-colors truncate">
+                Landing Page
+              </h4>
+              <p className="text-[10px] text-slate-500 font-medium truncate">Halaman utama website DOPHY</p>
+            </div>
           </div>
-          <ExternalLink className="w-3.5 h-3.5 text-purple-600 group-hover:scale-110 transition-transform shrink-0" />
+          <ChevronRight className="w-3.5 h-3.5 text-purple-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all shrink-0" />
         </Link>
       </div>
     </div>
