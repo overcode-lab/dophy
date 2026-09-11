@@ -35,7 +35,14 @@ export const SalesDetailModal: React.FC<SalesDetailModalProps> = ({ sale, onClos
       })
       .replace(":", ".") + " WIB";
 
-  const unitPrice = Number(sale.products?.price) || Math.round(Number(sale.total_price) / (sale.quantity || 1));
+  const unitPrice =
+    Number(sale.products?.price) ||
+    Math.round((Number(sale.total_price) + (hasReferral ? (sale.quantity || 1) * 3000 : 0)) / (sale.quantity || 1));
+  const grossPrice = (sale.quantity || 1) * unitPrice;
+  const discountAmount = hasReferral ? (sale.quantity || 1) * 3000 : 0;
+  const finalPaid = hasReferral ? Math.max(0, grossPrice - discountAmount) : Number(sale.total_price) || grossPrice;
+  const royaltyAmount = Number(sale.commission_amount) || (hasReferral ? (sale.quantity || 1) * 2000 : 0);
+  const adminNet = Math.max(0, finalPaid - royaltyAmount);
 
   const receiptData: SalesReceiptData = {
     id: sale.id,
@@ -44,7 +51,7 @@ export const SalesDetailModal: React.FC<SalesDetailModalProps> = ({ sale, onClos
     product_price: unitPrice,
     product_weight: sale.products?.weight,
     quantity: sale.quantity,
-    total_price: Number(sale.total_price),
+    total_price: finalPaid,
     referral_code: sale.referral_code,
     partner_name: sale.partner?.full_name || null,
     admin_name: "Admin DOPHY",
@@ -113,50 +120,74 @@ export const SalesDetailModal: React.FC<SalesDetailModalProps> = ({ sale, onClos
           {/* Main Metric Chips Banner */}
           {hasReferral ? (
             <div className="space-y-2">
-              {/* Row 1: Total Transaksi (Orange) */}
-              <div className="p-3 rounded-2xl bg-orange-50/90 border border-orange-200/90 text-center">
-                <span className="text-[10px] font-black uppercase tracking-wider text-dophy-700/80 block">
-                  Total Transaksi
-                </span>
-                <p className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-0.5">
-                  Rp {Number(sale.total_price).toLocaleString("id-ID")}
-                </p>
+              {/* Row 1: Total Pembayaran Pembeli (Emerald) & Omzet Admin (Indigo) */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700/80 block">
+                    Total Pembayaran
+                  </span>
+                  <p className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
+                    Rp {finalPaid.toLocaleString("id-ID")}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-indigo-50/90 border border-indigo-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700/80 block">
+                    Omzet Admin
+                  </span>
+                  <p className="text-base sm:text-lg font-black text-indigo-950 tracking-tight mt-0.5">
+                    Rp {adminNet.toLocaleString("id-ID")}
+                  </p>
+                </div>
               </div>
 
-              {/* Row 2: Jumlah (Sky Blue) & Komisi (Emerald) */}
+              {/* Row 2: Jumlah (Slate) & Royalti (Sky) */}
               <div className="grid grid-cols-2 gap-2">
-                <div className="p-2.5 rounded-2xl bg-sky-50/90 border border-sky-200/90 text-center flex flex-col justify-center">
-                  <span className="text-[9.5px] font-black uppercase tracking-wider text-sky-700/80 block">Jumlah</span>
-                  <p className="text-sm sm:text-base font-black text-sky-900 mt-0.5 leading-tight">
+                <div className="p-2.5 rounded-2xl bg-slate-50/90 border border-slate-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[9.5px] font-black uppercase tracking-wider text-slate-500 block">Jumlah</span>
+                  <p className="text-sm sm:text-base font-black text-slate-900 mt-0.5 leading-tight">
                     {sale.quantity} Pcs
                   </p>
                 </div>
 
-                <div className="p-2.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-center flex flex-col justify-center">
-                  <span className="text-[9.5px] font-black uppercase tracking-wider text-emerald-700/80 block">
+                <div className="p-2.5 rounded-2xl bg-sky-50/90 border border-sky-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[9.5px] font-black uppercase tracking-wider text-sky-700/80 block">
                     Creator Royalty
                   </span>
-                  <p className="text-sm sm:text-base font-black text-emerald-700 mt-0.5 leading-tight">
-                    +Rp {Number(sale.commission_amount).toLocaleString("id-ID")}
+                  <p className="text-sm sm:text-base font-black text-sky-700 mt-0.5 leading-tight">
+                    +Rp {royaltyAmount.toLocaleString("id-ID")}
                   </p>
                 </div>
               </div>
             </div>
           ) : (
-            /* Single Row for Direct / Without Referral (2 Columns: Orange & Sky Blue) */
-            <div className="grid grid-cols-2 gap-2">
-              <div className="p-3 rounded-2xl bg-orange-50/90 border border-orange-200/90 text-center flex flex-col justify-center">
-                <span className="text-[10px] font-black uppercase tracking-wider text-dophy-700/80 block">
-                  Total Transaksi
-                </span>
-                <p className="text-lg sm:text-xl font-black text-slate-900 tracking-tight mt-0.5">
-                  Rp {Number(sale.total_price).toLocaleString("id-ID")}
-                </p>
+            /* Direct / Without Referral */
+            <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-3 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700/80 block">
+                    Total Pembayaran
+                  </span>
+                  <p className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
+                    Rp {finalPaid.toLocaleString("id-ID")}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-indigo-50/90 border border-indigo-200/90 text-center flex flex-col justify-center">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700/80 block">
+                    Omzet Admin
+                  </span>
+                  <p className="text-base sm:text-lg font-black text-indigo-950 tracking-tight mt-0.5">
+                    Rp {adminNet.toLocaleString("id-ID")}
+                  </p>
+                </div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-sky-50/90 border border-sky-200/90 text-center flex flex-col justify-center">
-                <span className="text-[10px] font-black uppercase tracking-wider text-sky-700/80 block">Jumlah</span>
-                <p className="text-lg sm:text-xl font-black text-sky-900 tracking-tight mt-0.5">{sale.quantity} Pcs</p>
+              <div className="p-2.5 rounded-2xl bg-slate-50/90 border border-slate-200/90 text-center flex flex-col justify-center">
+                <span className="text-[9.5px] font-black uppercase tracking-wider text-slate-500 block">Jumlah</span>
+                <p className="text-sm sm:text-base font-black text-slate-900 mt-0.5 leading-tight">
+                  {sale.quantity} Pcs
+                </p>
               </div>
             </div>
           )}
@@ -183,11 +214,41 @@ export const SalesDetailModal: React.FC<SalesDetailModalProps> = ({ sale, onClos
               <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-100 text-xs">
                 <div className="min-w-0">
                   <span className="text-emerald-700 font-bold block leading-tight">Diskon</span>
-                  <span className="text-[10.5px] text-emerald-600/80 font-medium block mt-0.5">Hemat Rp 2.000 / pcs</span>
+                  <span className="text-[10.5px] text-emerald-600/80 font-medium block mt-0.5">
+                    Hemat Rp 3.000 / pcs
+                  </span>
                 </div>
                 <div className="text-right shrink-0">
                   <span className="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-black text-xs sm:text-[13px] border border-emerald-200/80 text-right">
-                    - Rp {(Number(sale.commission_amount) || sale.quantity * 2000).toLocaleString("id-ID")}
+                    - Rp {discountAmount.toLocaleString("id-ID")}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {hasReferral && (
+              <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-100 text-xs">
+                <div className="min-w-0">
+                  <span className="text-sky-700 font-bold block leading-tight">Creator Royalty</span>
+                  <span className="text-[10.5px] text-sky-600/80 font-medium block mt-0.5">Rp 2.000 / pcs</span>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="inline-block px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 font-black text-xs sm:text-[13px] border border-sky-200/80 text-right">
+                    + Rp {royaltyAmount.toLocaleString("id-ID")}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {hasReferral && (
+              <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-100 text-xs">
+                <div className="min-w-0">
+                  <span className="text-indigo-900 font-bold block leading-tight">Omzet Admin</span>
+                  <span className="text-[10.5px] text-indigo-600/80 font-medium block mt-0.5">Rp 14.000 / pcs</span>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="inline-block px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-900 font-black text-xs sm:text-[13px] border border-indigo-200/80 text-right">
+                    Rp {adminNet.toLocaleString("id-ID")}
                   </span>
                 </div>
               </div>

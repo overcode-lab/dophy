@@ -58,7 +58,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
   const qty = Number(receipt.quantity) || 1;
   const unitPrice = Number(receipt.product_price) || 0;
   const grossTotal = qty * unitPrice;
-  const discountPerPcs = 2000;
+  const discountPerPcs = 3000;
   const totalDiscount = hasReferral ? qty * discountPerPcs : 0;
   const finalTotal = hasReferral ? Math.max(0, grossTotal - totalDiscount) : Number(receipt.total_price) || grossTotal;
 
@@ -79,7 +79,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
 
     if (hasReferral) {
       lines.push(`• Diskon`);
-      lines.push(`  Hemat Rp 2.000 / pcs × ${qty} Pcs = -Rp ${totalDiscount.toLocaleString("id-ID")}`);
+      lines.push(`  Hemat Rp 3.000 / pcs × ${qty} Pcs = -Rp ${totalDiscount.toLocaleString("id-ID")}`);
     }
 
     lines.push(``);
@@ -241,7 +241,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
 
         ctx.fillStyle = "#10b981";
         ctx.font = "600 10.5px 'Plus Jakarta Sans', sans-serif";
-        ctx.fillText(`Hemat Rp 2.000 / pcs × ${qty} Pcs`, 24, currentY + 16);
+        ctx.fillText(`Hemat Rp 3.000 / pcs × ${qty} Pcs`, 24, currentY + 16);
 
         ctx.textAlign = "right";
         ctx.fillStyle = "#059669";
@@ -444,7 +444,7 @@ export const SalesReceiptModal: React.FC<SalesReceiptModalProps> = ({ isOpen, on
               <div className="flex items-start justify-between gap-2 pt-1.5 border-t border-dashed border-slate-100">
                 <div className="min-w-0">
                   <p className="font-black text-emerald-700 leading-tight">Diskon</p>
-                  <p className="text-[11px] font-semibold text-emerald-600 mt-0.5">Hemat Rp 2.000 / pcs × {qty} Pcs</p>
+                  <p className="text-[11px] font-semibold text-emerald-600 mt-0.5">Hemat Rp 3.000 / pcs × {qty} Pcs</p>
                 </div>
                 <span className="font-black text-emerald-600 text-right shrink-0">
                   - Rp {totalDiscount.toLocaleString("id-ID")}

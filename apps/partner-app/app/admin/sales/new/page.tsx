@@ -21,6 +21,7 @@ import {
   X,
   Wallet,
   Clock,
+  TrendingUp,
 } from "lucide-react";
 import { CustomConfirmModal, ResponsiveDetailModal, LoadingSpinner, Footer, SideMenu, SideMenuDesktop } from "@repo/ui";
 import { SalesReceiptModal, SalesReceiptData } from "../components/SalesReceiptModal";
@@ -85,8 +86,13 @@ export default function AdminNewSalePage() {
 
   const selectedProduct = products.find((p) => p.id === selectedProductId);
   const reqQty = Math.max(1, Number(quantity) || 1);
-  const totalPrice = (selectedProduct ? Number(selectedProduct.price) : 0) * reqQty;
-  const commissionPreview = selectedPartner || referralCodeInput ? reqQty * 2000 : 0;
+  const unitPrice = selectedProduct ? Number(selectedProduct.price) : 0;
+  const grossPrice = unitPrice * reqQty;
+  const isReferralApplied = Boolean(selectedPartner || (referralCodeInput && referralCodeInput.trim()));
+  const buyerDiscount = isReferralApplied ? reqQty * 3000 : 0;
+  const finalTotalPrice = Math.max(0, grossPrice - buyerDiscount);
+  const commissionPreview = isReferralApplied ? reqQty * 2000 : 0;
+  const adminNetIncome = isReferralApplied ? Math.max(0, finalTotalPrice - commissionPreview) : finalTotalPrice;
 
   // Filter partners for modal list
   const filteredPartners = partners.filter((a) => {
@@ -177,7 +183,7 @@ export default function AdminNewSalePage() {
         product_price: selectedProduct ? Number(selectedProduct.price) : 0,
         product_weight: selectedProduct?.weight,
         quantity: Number(quantity),
-        total_price: totalPrice,
+        total_price: finalTotalPrice,
         referral_code: referralCodeInput ? referralCodeInput.trim() : null,
         partner_name: selectedPartner?.full_name || null,
         admin_name: adminUser?.full_name || "Admin DOPHY",
@@ -385,24 +391,26 @@ export default function AdminNewSalePage() {
 
               {/* Calculations Preview (1 Row / Item Info, Background Illustration & Colorful) */}
               <div className="space-y-2.5">
-                {/* Row 1: Total Harga Sales (Hijau) */}
-                <div className="p-3.5 py-2 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border border-emerald-200/90 shadow-2xs flex items-center justify-between gap-3 text-left relative overflow-hidden group">
+                {/* Row 1: Total Pembayaran Pembeli (Hijau) */}
+                <div className="p-3.5 py-2.5 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border border-emerald-200/90 shadow-2xs flex items-center justify-between gap-3 text-left relative overflow-hidden group">
                   {/* Background Illustration Watermark Icon */}
                   <Receipt className="absolute -right-2 -bottom-2 w-16 h-16 text-emerald-600/10 stroke-[1.2] pointer-events-none group-hover:scale-110 group-hover:text-emerald-600/15 transition-all" />
 
                   <div className="relative z-10 min-w-0 space-y-0.5">
-                    <span className="text-xs font-black text-slate-900 block truncate">Total Harga</span>
+                    <span className="text-xs font-black text-slate-900 block truncate">Total Pembayaran Pembeli</span>
                     <span className="text-[11px] font-semibold text-emerald-800/80 block truncate">
-                      {reqQty} Pcs × Rp {selectedProduct ? Number(selectedProduct.price).toLocaleString("id-ID") : 0}
+                      {isReferralApplied
+                        ? `Diskon Rp 3.000 / pcs (Hemat Rp ${buyerDiscount.toLocaleString("id-ID")})`
+                        : `${reqQty} Pcs × Rp ${unitPrice.toLocaleString("id-ID")}`}
                     </span>
                   </div>
                   <strong className="relative z-10 text-base sm:text-lg font-black text-emerald-950 shrink-0">
-                    Rp {totalPrice.toLocaleString("id-ID")}
+                    Rp {finalTotalPrice.toLocaleString("id-ID")}
                   </strong>
                 </div>
 
                 {/* Row 2: Creator Royalty (Biru) */}
-                <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-sky-500/15 via-blue-500/10 to-indigo-500/15 border border-sky-200/90 shadow-2xs flex items-center justify-between gap-3 text-left relative overflow-hidden group">
+                <div className="p-3.5 py-2.5 sm:p-4 rounded-2xl bg-gradient-to-r from-sky-500/15 via-blue-500/10 to-indigo-500/15 border border-sky-200/90 shadow-2xs flex items-center justify-between gap-3 text-left relative overflow-hidden group">
                   {/* Background Illustration Watermark Icon */}
                   <Coins className="absolute -right-2 -bottom-2 w-16 h-16 text-sky-600/10 stroke-[1.2] pointer-events-none group-hover:scale-110 group-hover:text-sky-600/15 transition-all" />
 
@@ -418,6 +426,24 @@ export default function AdminNewSalePage() {
                   </div>
                   <strong className="relative z-10 text-base sm:text-lg font-black text-sky-950 shrink-0">
                     +Rp {commissionPreview.toLocaleString("id-ID")}
+                  </strong>
+                </div>
+
+                {/* Row 3: Pendapatan Bersih Admin (Indigo / Violet) */}
+                <div className="p-3.5 py-2.5 sm:p-4 rounded-2xl bg-gradient-to-r from-indigo-500/15 via-purple-500/10 to-indigo-500/15 border border-indigo-200/90 shadow-2xs flex items-center justify-between gap-3 text-left relative overflow-hidden group">
+                  {/* Background Illustration Watermark Icon */}
+                  <TrendingUp className="absolute -right-2 -bottom-2 w-16 h-16 text-indigo-600/10 stroke-[1.2] pointer-events-none group-hover:scale-110 group-hover:text-indigo-600/15 transition-all" />
+
+                  <div className="relative z-10 min-w-0 space-y-0.5">
+                    <span className="text-xs font-black text-slate-900 block truncate">Omzet Admin</span>
+                    <span className="text-[11px] font-semibold text-indigo-800/80 block truncate">
+                      {isReferralApplied
+                        ? `Rp 14.000 / pcs (Setelah Diskon & Royalti)`
+                        : `Rp ${unitPrice.toLocaleString("id-ID")} / pcs (Full Direct)`}
+                    </span>
+                  </div>
+                  <strong className="relative z-10 text-base sm:text-lg font-black text-indigo-950 shrink-0">
+                    Rp {adminNetIncome.toLocaleString("id-ID")}
                   </strong>
                 </div>
               </div>

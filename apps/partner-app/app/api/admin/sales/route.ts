@@ -268,13 +268,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Calculate prices and commission server-side
-    const totalPrice = Number(product.price) * reqQty;
-    let partnerId: string | null = null;
-    let commissionAmount = 0;
-
-    // Fixed commission: Rp 2.000 per pcs snack (dapat disesuaikan)
+    // 2. Calculate prices, buyer discount (Rp 3.000), and creator royalty (Rp 2.000)
+    const unitPrice = Number(product.price);
+    const grossPrice = unitPrice * reqQty;
+    const BUYER_DISCOUNT_PER_PCS = 3000;
     const COMMISSION_PER_PCS = 2000;
+
+    let partnerId: string | null = null;
+    let discountAmount = 0;
+    let commissionAmount = 0;
 
     if (referral_code && referral_code.trim()) {
       const cleanRefCode = referral_code.trim();
@@ -293,8 +295,11 @@ export async function POST(request: Request) {
       }
 
       partnerId = partner.id;
+      discountAmount = reqQty * BUYER_DISCOUNT_PER_PCS;
       commissionAmount = reqQty * COMMISSION_PER_PCS;
     }
+
+    const finalTotalPrice = Math.max(0, grossPrice - discountAmount);
 
     // 3. Deduct product stock
     const newStock = product.stock - reqQty;
@@ -306,7 +311,7 @@ export async function POST(request: Request) {
       .insert({
         product_id,
         quantity: reqQty,
-        total_price: totalPrice,
+        total_price: finalTotalPrice,
         referral_code: referral_code ? referral_code.trim() : null,
         partner_id: partnerId,
         commission_amount: commissionAmount,
